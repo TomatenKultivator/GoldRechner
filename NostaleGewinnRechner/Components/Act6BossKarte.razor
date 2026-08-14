@@ -9,7 +9,7 @@
                 <tr class="@(Boss.GoldDirekt ? "zeile-inaktiv" : "")"><td>Anzahl Gold-Drops</td><td class="r"><GoldInput @bind-Value="Boss.DropsProRaid" /></td></tr>
                 <tr class="@(Boss.GoldDirekt ? "zeile-inaktiv" : "")"><td>Gold pro Drop</td><td class="r muted">@Fmt.Gold(Boss.GoldProDrop)</td></tr>
                 <tr class="@(Boss.GoldDirekt ? "zeile-inaktiv" : "")"><td class="muted">Gold pro Raid</td><td class="r">@Fmt.Gold(Boss.GoldProRaid)</td></tr>
-                <tr class="@(Boss.GoldDirekt ? "" : "zeile-inaktiv")"><td>Gold gesamt gehoben</td><td class="r"><GoldInput @bind-Value="Boss.GoldGehoben" /></td></tr>
+                <tr class="@(Boss.GoldDirekt ? "" : "zeile-inaktiv")"><td>Gold gesamt gehoben <OhneRateHinweis /></td><td class="r"><GoldInput @bind-Value="Boss.GoldGehoben" /></td></tr>
                 <tr><td>Boxen pro Raid</td><td class="r"><GoldInput @bind-Value="Boss.BoxenProRaid" /></td></tr>
                 <tr><td>Wert pro Box</td><td class="r"><GoldInput @bind-Value="Boss.Boxenwert" /></td></tr>
                 @if (!Boss.GoldDirekt)

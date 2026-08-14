@@ -34,7 +34,7 @@
         <span class="stat-value">@Fmt.Gold(A5.BargoldProRaid)</span>
     </div>
     <label class="big-input @(A5.GoldDirekt ? "" : "inaktiv")">
-        <span>Gold gesamt gehoben</span>
+        <span>Gold gesamt gehoben <OhneRateHinweis /></span>
         <GoldInput @bind-Value="A5.GoldGehoben" />
     </label>
     <div class="stat">

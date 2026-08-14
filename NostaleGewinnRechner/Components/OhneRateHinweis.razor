@@ -1,0 +1,8 @@
+@inject RechnerState State
+
+@* Merker an Feldern für selbst gezähltes Gold: dort ist die Gold-Rate schon
+   im eingetragenen Betrag enthalten und wird nicht noch einmal gerechnet. *@
+@if (State.Charakter.GoldRate != 0)
+{
+    <span class="muted">(ohne Gold-Rate)</span>
+}

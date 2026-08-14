@@ -25,7 +25,7 @@
         <label class="big-input @(A7.CarnoGoldDirekt ? "inaktiv" : "")"><span>Gold-Drops pro Raid</span><GoldInput @bind-Value="A7.CarnoDropsProRaid" /></label>
         <div class="stat @(A7.CarnoGoldDirekt ? "inaktiv" : "")"><span class="stat-label">Gold pro Drop</span><span class="stat-value">@Fmt.Gold(A7.CarnoGoldProDrop)</span></div>
         <div class="stat @(A7.CarnoGoldDirekt ? "inaktiv" : "")"><span class="stat-label">Bargold pro Raid</span><span class="stat-value">@Fmt.Gold(A7.CarnoBargoldProRaid)</span></div>
-        <label class="big-input @(A7.CarnoGoldDirekt ? "" : "inaktiv")"><span>Gold gesamt gehoben</span><GoldInput @bind-Value="A7.CarnoGoldGehoben" /></label>
+        <label class="big-input @(A7.CarnoGoldDirekt ? "" : "inaktiv")"><span>Gold gesamt gehoben <OhneRateHinweis /></span><GoldInput @bind-Value="A7.CarnoGoldGehoben" /></label>
     </div>
     <div class="table-wrap">
         <table class="calc-table">

@@ -393,12 +393,16 @@ public class Act5Rechner
     public double SiegelPreis { get; set; } = 600_000;
     public double DropsProRaid { get; set; } = 10;
     public double GoldProDrop { get; set; } = 20_000;
-    /// <summary>true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.</summary>
+    /// <summary>
+    /// true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.
+    /// Gezähltes Gold ist bereits mit der eigenen Gold-Rate im Beutel gelandet
+    /// und wird darum nicht noch einmal mit dem Charakter-Faktor multipliziert.
+    /// </summary>
     public bool GoldDirekt { get; set; }
     public double GoldGehoben { get; set; }
     public double BargoldProRaid => DropsProRaid * GoldProDrop;
     public double NettoBargold => GoldDirekt
-        ? GoldGehoben * F - SiegelPreis * Raids
+        ? GoldGehoben - SiegelPreis * Raids
         : (BargoldProRaid * F - SiegelPreis) * Raids;
 
     // Ausbeute einer Stunde, von Fettbong gezählt. Gemessen wurde während eines
@@ -448,7 +452,11 @@ public class Act6Boss
     public double SiegelPreis { get; set; }
     public double DropsProRaid { get; set; }
     public double GoldProDrop { get; set; }
-    /// <summary>true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.</summary>
+    /// <summary>
+    /// true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.
+    /// Gezähltes Gold ist bereits mit der eigenen Gold-Rate im Beutel gelandet
+    /// und wird darum nicht noch einmal mit dem Charakter-Faktor multipliziert.
+    /// </summary>
     public bool GoldDirekt { get; set; }
     public double GoldGehoben { get; set; }
     public double BoxenProRaid { get; set; }
@@ -457,7 +465,7 @@ public class Act6Boss
     public double GoldProRaid => DropsProRaid * GoldProDrop;
     public double GoldgewinnProRaid => GoldProRaid * F - SiegelPreis;
     public double GoldGesamt => GoldDirekt
-        ? GoldGehoben * F - SiegelPreis * Raids
+        ? GoldGehoben - SiegelPreis * Raids
         : GoldgewinnProRaid * Raids;
     public double BoxenGesamt => BoxenProRaid * Boxenwert * Raids;
     public double Gesamt => GoldGesamt + BoxenGesamt;
@@ -502,8 +510,10 @@ public class Act6Rechner
     public double HeberFulliPreis { get; set; } = 30_000;
 
     public double FernonSiegelkosten => FernonSiegel * FernonRaids;
-    public double FernonGoldgewinn => FernonGoldGehoben * F - FernonSiegelkosten;
-    public double FernonGoldProRaid => FernonRaids > 0 ? FernonGoldGehoben * F / FernonRaids : 0;
+    // Fernon kennt nur den Weg über selbst gezähltes Gold – das ist bereits mit
+    // der eigenen Gold-Rate gehoben und bekommt darum keinen Charakter-Faktor.
+    public double FernonGoldgewinn => FernonGoldGehoben - FernonSiegelkosten;
+    public double FernonGoldProRaid => FernonRaids > 0 ? FernonGoldGehoben / FernonRaids : 0;
     public double HeberKosten => GoldHeber + HeberFullis * HeberFulliPreis;
     public double FernonGewinn => HeberDabei ? FernonGoldgewinn - HeberKosten : FernonGoldgewinn;
 
@@ -544,7 +554,7 @@ public class Act7Rechner
         new() { Name = "Kisten High Rare", Anzahl = 15, Preis = 795_000 },
     ];
     public double CarnoGoldgewinn => CarnoGoldDirekt
-        ? CarnoGoldGehoben * F - CarnoSiegel * CarnoRaids
+        ? CarnoGoldGehoben - CarnoSiegel * CarnoRaids
         : (CarnoBargoldProRaid * F - CarnoSiegel) * CarnoRaids;
     public double CarnoGewinn => CarnoGoldgewinn + CarnoKisten.Sum(r => r.Gesamt);
 
@@ -563,7 +573,7 @@ public class Act7Rechner
         new() { Name = "Kisten Low Rare", Anzahl = 1_028, Preis = 50_000 },
     ];
     public double KirollaGoldgewinn => KirollaGoldDirekt
-        ? KirollaGoldGehoben * F - KirollaSiegel * KirollaRaids
+        ? KirollaGoldGehoben - KirollaSiegel * KirollaRaids
         : (KirollaGoldProRaid * F - KirollaSiegel) * KirollaRaids;
     public double KirollaBoxenErloes => KirollaBoxen.Sum(r => r.Gesamt);
     public double KirollaGewinn => KirollaGoldgewinn + KirollaObsidiane.Gesamt + KirollaBoxenErloes;
@@ -592,7 +602,7 @@ public class Act7Rechner
         new() { Name = "Kisten High Rare", Anzahl = 28, Preis = 1_000_000 },
     ];
     public double BelialGoldgewinn => BelialGoldDirekt
-        ? BelialGoldGehoben * F - BelialSiegel * BelialRaids
+        ? BelialGoldGehoben - BelialSiegel * BelialRaids
         : (BelialBargoldProRaid * F - BelialSiegel) * BelialRaids;
     public double BelialBoxenErloes =>
         BelialOeffnen ? BelialOeffnenItems.Sum(r => r.Gesamt) : BelialVerkauf.Sum(r => r.Gesamt);
@@ -643,7 +653,11 @@ public class Act8Boss
     public double SiegelPreis { get; set; }
     public double DropsProRaid { get; set; }
     public double GoldProDrop { get; set; } = Act8Rechner.GoldProDropVorgabe;
-    /// <summary>true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.</summary>
+    /// <summary>
+    /// true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.
+    /// Gezähltes Gold ist bereits mit der eigenen Gold-Rate im Beutel gelandet
+    /// und wird darum nicht noch einmal mit dem Charakter-Faktor multipliziert.
+    /// </summary>
     public bool GoldDirekt { get; set; }
     public double GoldGehoben { get; set; }
     // Kisten zählen für den gesamten Run, nicht pro Raid
@@ -657,7 +671,7 @@ public class Act8Boss
     public double GoldProRaid => DropsProRaid * GoldProDrop;
     public double GoldgewinnProRaid => GoldProRaid * F - SiegelPreis;
     public double GoldGesamt => GoldDirekt
-        ? GoldGehoben * F - SiegelPreis * Raids
+        ? GoldGehoben - SiegelPreis * Raids
         : GoldgewinnProRaid * Raids;
     public double BoxenGesamt => BoxenAnzahl * Boxenwert;
     public double HighRareGesamt => HighRareAnzahl * HighRarePreis;
@@ -729,7 +743,11 @@ public class Act9Rechner
     public double SiegelPreis { get; set; }
     public double DropsProRaid { get; set; } = 1;
     public double GoldProDrop { get; set; } = 52_000;
-    /// <summary>true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.</summary>
+    /// <summary>
+    /// true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.
+    /// Gezähltes Gold ist bereits mit der eigenen Gold-Rate im Beutel gelandet
+    /// und wird darum nicht noch einmal mit dem Charakter-Faktor multipliziert.
+    /// </summary>
     public bool GoldDirekt { get; set; }
     public double GoldGehoben { get; set; }
     // Kisten und Vollmonde zählen für den gesamten Run, nicht pro Raid
@@ -745,7 +763,7 @@ public class Act9Rechner
     public double GoldProRaid => DropsProRaid * GoldProDrop;
     public double GoldgewinnProRaid => GoldProRaid * F - SiegelPreis;
     public double GoldGesamt => GoldDirekt
-        ? GoldGehoben * F - SiegelPreis * Raids
+        ? GoldGehoben - SiegelPreis * Raids
         : GoldgewinnProRaid * Raids;
     public double BoxenGesamt => BoxenAnzahl * Boxenwert;
     public double VollmondeGesamt => VollmondeAnzahl * VollmondPreis;

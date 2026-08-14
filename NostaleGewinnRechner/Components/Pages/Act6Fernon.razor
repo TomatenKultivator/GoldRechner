@@ -23,7 +23,7 @@
                 <tbody>
                     <tr><td>Anzahl Raids</td><td class="r"><GoldInput @bind-Value="A6.FernonRaids" /></td></tr>
                     <tr><td>Siegelpreis (einzeln)</td><td class="r"><GoldInput @bind-Value="A6.FernonSiegel" /></td></tr>
-                    <tr><td>Gold gehoben</td><td class="r"><GoldInput @bind-Value="A6.FernonGoldGehoben" /></td></tr>
+                    <tr><td>Gold gehoben <OhneRateHinweis /></td><td class="r"><GoldInput @bind-Value="A6.FernonGoldGehoben" /></td></tr>
                     <tr><td class="muted">Siegelkosten gesamt</td><td class="r">@Fmt.Gold(A6.FernonSiegelkosten)</td></tr>
                     <tr><td class="muted">Gold pro Raid</td><td class="r">@Fmt.Gold(A6.FernonGoldProRaid)</td></tr>
                     <tr><td class="muted">Goldgewinn</td><td class="r @(A6.FernonGoldgewinn < 0 ? "loss" : "")">@Fmt.Gold(A6.FernonGoldgewinn)</td></tr>

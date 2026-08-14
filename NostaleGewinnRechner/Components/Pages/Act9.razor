@@ -27,7 +27,7 @@
                     <tr class="@(A9.GoldDirekt ? "zeile-inaktiv" : "")"><td>Anzahl Gold-Drops</td><td class="r"><GoldInput @bind-Value="A9.DropsProRaid" /></td></tr>
                     <tr class="@(A9.GoldDirekt ? "zeile-inaktiv" : "")"><td>Gold pro Drop</td><td class="r muted">@Fmt.Gold(A9.GoldProDrop)</td></tr>
                     <tr class="@(A9.GoldDirekt ? "zeile-inaktiv" : "")"><td class="muted">Gold pro Raid</td><td class="r">@Fmt.Gold(A9.GoldProRaid)</td></tr>
-                    <tr class="@(A9.GoldDirekt ? "" : "zeile-inaktiv")"><td>Gold gesamt gehoben</td><td class="r"><GoldInput @bind-Value="A9.GoldGehoben" /></td></tr>
+                    <tr class="@(A9.GoldDirekt ? "" : "zeile-inaktiv")"><td>Gold gesamt gehoben <OhneRateHinweis /></td><td class="r"><GoldInput @bind-Value="A9.GoldGehoben" /></td></tr>
                     <tr><td>Kisten (gesamter Run)</td><td class="r"><GoldInput @bind-Value="A9.BoxenAnzahl" /></td></tr>
                     <tr><td>Wert pro Kiste</td><td class="r"><GoldInput @bind-Value="A9.Boxenwert" /></td></tr>
                     <tr><td>Vollmonde (gesamter Run)</td><td class="r"><GoldInput @bind-Value="A9.VollmondeAnzahl" /></td></tr>

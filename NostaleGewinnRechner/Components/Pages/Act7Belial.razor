@@ -30,7 +30,7 @@
         <label class="big-input @(A7.BelialGoldDirekt ? "inaktiv" : "")"><span>Gold-Drops pro Raid</span><GoldInput @bind-Value="A7.BelialDropsProRaid" /></label>
         <div class="stat @(A7.BelialGoldDirekt ? "inaktiv" : "")"><span class="stat-label">Gold pro Drop</span><span class="stat-value">@Fmt.Gold(A7.BelialGoldProDrop)</span></div>
         <div class="stat @(A7.BelialGoldDirekt ? "inaktiv" : "")"><span class="stat-label">Bargold pro Raid</span><span class="stat-value">@Fmt.Gold(A7.BelialBargoldProRaid)</span></div>
-        <label class="big-input @(A7.BelialGoldDirekt ? "" : "inaktiv")"><span>Gold gesamt gehoben</span><GoldInput @bind-Value="A7.BelialGoldGehoben" /></label>
+        <label class="big-input @(A7.BelialGoldDirekt ? "" : "inaktiv")"><span>Gold gesamt gehoben <OhneRateHinweis /></span><GoldInput @bind-Value="A7.BelialGoldGehoben" /></label>
         <div class="stat"><span class="stat-label">Goldgewinn</span><span class="stat-value @(A7.BelialGoldgewinn < 0 ? "loss" : "")">@Fmt.Gold(A7.BelialGoldgewinn)</span></div>
     </div>
     <div class="table-wrap">
