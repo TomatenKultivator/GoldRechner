@@ -1,0 +1,21 @@
+@page "/act8"
+@page "/act8/alzanor"
+@inherits RechnerPage
+
+<PageTitle>Act 8 · Alzanor – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Act 8 <span class="accent">Alzanor</span></h1>
+    <p class="sub">Raids mit Gold-Drops und Kisten – High-Rare-Kisten im Erweitert-Bereich.</p>
+</div>
+
+<div class="input-row">
+    <div class="stat primary">
+        <span class="stat-label">Gewinn Alzanor</span>
+        <span class="stat-value @(State.Act8.Alzanor.Gesamt < 0 ? "loss" : "profit")">@Fmt.Gold(State.Act8.Alzanor.Gesamt)</span>
+    </div>
+</div>
+
+<div class="single-col">
+    <Act8BossKarte Boss="State.Act8.Alzanor" />
+</div>

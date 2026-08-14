@@ -63,9 +63,18 @@
                 <NavLink class="nav-link" href="act7/belial">Belial</NavLink>
             </div>
         }
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="act8">Act 8 · Alzanor</NavLink>
-        </div>
+        <button type="button" class="nav-subgroup @(act8Offen ? "offen" : "")" @onclick="() => act8Offen = !act8Offen" @onclick:stopPropagation>
+            <span class="chev">▸</span> Act 8
+        </button>
+        @if (act8Offen)
+        {
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act8/alzanor">Alzanor</NavLink>
+            </div>
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act8/valehir">Valehir</NavLink>
+            </div>
+        }
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="act9">Act 9 · Pollu</NavLink>
         </div>
@@ -87,6 +96,7 @@
 @code {
     private bool act6Offen;
     private bool act7Offen;
+    private bool act8Offen;
 
     protected override void OnInitialized()
     {
@@ -111,6 +121,11 @@
         if (uri.Contains("/act7", StringComparison.OrdinalIgnoreCase))
         {
             act7Offen = true;
+        }
+
+        if (uri.Contains("/act8", StringComparison.OrdinalIgnoreCase))
+        {
+            act8Offen = true;
         }
     }
 

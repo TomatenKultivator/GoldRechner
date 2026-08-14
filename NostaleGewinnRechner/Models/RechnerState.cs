@@ -123,6 +123,8 @@ public class MatPreise
     public double SiegelKirolla { get; set; } = 535_000;
     public double SiegelBelial { get; set; } = 499_998;
     public double SiegelAlzanor { get; set; } = 37_000;
+    /// <summary>Eigenes Siegel des zweiten Act-8-Bosses – noch kein Preis erhoben.</summary>
+    public double SiegelValehir { get; set; }
     public double SiegelPollu { get; set; } = 29_300;
 
     // ---- Truhen und Kisten je Aktivität ----
@@ -167,7 +169,8 @@ public class MatPreise
         ("gillion", Gillion), ("siegelglace", SiegelGlace), ("siegeldraco", SiegelDraco),
         ("siegelkertos", SiegelKertos), ("siegelerenia", SiegelErenia), ("siegelzenas", SiegelZenas),
         ("siegelfernon", SiegelFernon), ("siegelcarno", SiegelCarno), ("siegelkirolla", SiegelKirolla),
-        ("siegelbelial", SiegelBelial), ("siegelalzanor", SiegelAlzanor), ("siegelpollu", SiegelPollu),
+        ("siegelbelial", SiegelBelial), ("siegelalzanor", SiegelAlzanor),
+        ("siegelvalehir", SiegelValehir), ("siegelpollu", SiegelPollu),
         ("blauesteine", BlaueSteine), ("truheglace", TruheGlace), ("truhedraco", TruheDraco),
         ("truheact5", TruheAct5), ("act5intakt", Act5Intakt), ("act5kaputt", Act5Kaputt),
         ("truheerenia", TruheErenia), ("truhezenas", TruheZenas),
@@ -624,26 +627,31 @@ public class Act7Rechner
     }
 }
 
-// ---------------------------------------------------------------- Act 8 (Alzanor)
+// ---------------------------------------------------------------- Act 8 (Alzanor / Valehir)
 
-public class Act8Rechner
+/// <summary>
+/// Ein Act-8-Boss. Beide Bosse droppen dasselbe Gold pro Drop und dieselben
+/// Kisten; gezählt werden Kisten für den gesamten Run, nicht pro Raid.
+/// </summary>
+public class Act8Boss
 {
     [JsonIgnore] public Charakter? Charakter { get; set; }
     private double F => Charakter?.Faktor ?? 1;
 
-    public double Raids { get; set; } = 1;
+    public required string Name { get; set; }
+    public double Raids { get; set; }
     public double SiegelPreis { get; set; }
-    public double DropsProRaid { get; set; } = 1;
-    public double GoldProDrop { get; set; } = 30_000;
+    public double DropsProRaid { get; set; }
+    public double GoldProDrop { get; set; } = Act8Rechner.GoldProDropVorgabe;
     /// <summary>true = selbst gezähltes Gesamt-Gold nutzen statt Drops × Gold pro Drop.</summary>
     public bool GoldDirekt { get; set; }
     public double GoldGehoben { get; set; }
     // Kisten zählen für den gesamten Run, nicht pro Raid
-    public double BoxenAnzahl { get; set; } = 146;
+    public double BoxenAnzahl { get; set; }
     public double Boxenwert { get; set; } = 450_000;
 
     // Erweitert: High-Rare-Kisten (gesamter Run)
-    public double HighRareAnzahl { get; set; } = 16;
+    public double HighRareAnzahl { get; set; }
     public double HighRarePreis { get; set; } = 1_700_000;
 
     public double GoldProRaid => DropsProRaid * GoldProDrop;
@@ -668,6 +676,46 @@ public class Act8Rechner
         HighRareAnzahl = 0;
         HighRarePreis = 0;
     }
+}
+
+public class Act8Rechner
+{
+    [JsonIgnore] public Charakter? Charakter { get; set; }
+
+    /// <summary>Gold pro Drop – bei Valehir dasselbe wie bei Alzanor.</summary>
+    public const double GoldProDropVorgabe = 30_000;
+
+    public Act8Boss Alzanor { get; set; } = new()
+    {
+        Name = "Alzanor", Raids = 1, DropsProRaid = 1, BoxenAnzahl = 146, HighRareAnzahl = 16,
+    };
+
+    // Für Valehir stehen in Fettbongs Tabelle noch keine gezählten Mengen – Gold
+    // pro Drop und die Kistenpreise sind dieselben wie bei Alzanor, Raid- und
+    // Kistenzahlen bleiben darum 0, bis der Nutzer eigene Werte einträgt.
+    public Act8Boss Valehir { get; set; } = new() { Name = "Valehir" };
+
+    public double Gesamt => Alzanor.Gesamt + Valehir.Gesamt;
+
+    public void Nullen()
+    {
+        Alzanor.Nullen();
+        Valehir.Nullen();
+    }
+
+    // ---- Altlast: Stände von vor Valehir hatten Alzanors Felder flach im JSON.
+    // Diese Setter (bewusst ohne Getter, damit sie nicht mit exportiert werden)
+    // leiten solche Dateien beim Import nach Alzanor um.
+    public double Raids { set => Alzanor.Raids = value; }
+    public double SiegelPreis { set => Alzanor.SiegelPreis = value; }
+    public double DropsProRaid { set => Alzanor.DropsProRaid = value; }
+    public double GoldProDrop { set => Alzanor.GoldProDrop = value; }
+    public bool GoldDirekt { set => Alzanor.GoldDirekt = value; }
+    public double GoldGehoben { set => Alzanor.GoldGehoben = value; }
+    public double BoxenAnzahl { set => Alzanor.BoxenAnzahl = value; }
+    public double Boxenwert { set => Alzanor.Boxenwert = value; }
+    public double HighRareAnzahl { set => Alzanor.HighRareAnzahl = value; }
+    public double HighRarePreis { set => Alzanor.HighRarePreis = value; }
 }
 
 // ---------------------------------------------------------------- Act 9 (Pollu)
@@ -924,7 +972,11 @@ public class RechnerState
                 break;
             case "siegelalzanor":
                 Mats.SiegelAlzanor = preis;
-                Act8.SiegelPreis = preis;
+                Act8.Alzanor.SiegelPreis = preis;
+                break;
+            case "siegelvalehir":
+                Mats.SiegelValehir = preis;
+                Act8.Valehir.SiegelPreis = preis;
                 break;
             case "siegelpollu":
                 Mats.SiegelPollu = preis;
@@ -988,13 +1040,16 @@ public class RechnerState
                 Mats.TruheBelialHigh = preis;
                 ItemPreis(Act7.BelialVerkauf, "Kisten High Rare", preis);
                 break;
+            // Beide Act-8-Bosse droppen dieselben Kisten.
             case "truheact8":
                 Mats.TruheAct8 = preis;
-                Act8.Boxenwert = preis;
+                Act8.Alzanor.Boxenwert = preis;
+                Act8.Valehir.Boxenwert = preis;
                 break;
             case "truheact8high":
                 Mats.TruheAct8High = preis;
-                Act8.HighRarePreis = preis;
+                Act8.Alzanor.HighRarePreis = preis;
+                Act8.Valehir.HighRarePreis = preis;
                 break;
             case "truheact9":
                 Mats.TruheAct9 = preis;
@@ -1052,6 +1107,8 @@ public class RechnerState
         Act6.Zenas.Charakter = Charakter;
         Act7.Charakter = Charakter;
         Act8.Charakter = Charakter;
+        Act8.Alzanor.Charakter = Charakter;
+        Act8.Valehir.Charakter = Charakter;
         Act9.Charakter = Charakter;
     }
 
@@ -1168,7 +1225,8 @@ public class RechnerState
         new("Act 7 · Carno", $"{Fmt.Gold(Act7.CarnoRaids)} Raids", Act7.CarnoGewinn, "act7/carno"),
         new("Act 7 · Kirolla", $"{Fmt.Gold(Act7.KirollaRaids)} Raids", Act7.KirollaGewinn, "act7/kirolla"),
         new("Act 7 · Belial", $"{Fmt.Gold(Act7.BelialRaids)} Raids", Act7.BelialGewinn, "act7/belial"),
-        new("Act 8 · Alzanor", $"{Fmt.Gold(Act8.Raids)} Raids", Act8.Gesamt, "act8"),
+        new("Act 8 · Alzanor", $"{Fmt.Gold(Act8.Alzanor.Raids)} Raids", Act8.Alzanor.Gesamt, "act8/alzanor"),
+        new("Act 8 · Valehir", $"{Fmt.Gold(Act8.Valehir.Raids)} Raids", Act8.Valehir.Gesamt, "act8/valehir"),
         new("Act 9 · Pollu", $"{Fmt.Gold(Act9.Raids)} Raids", Act9.Gesamt, "act9"),
     ];
 

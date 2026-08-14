@@ -1,0 +1,26 @@
+@page "/act8/valehir"
+@inherits RechnerPage
+
+<PageTitle>Act 8 · Valehir – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Act 8 <span class="accent">Valehir</span></h1>
+    <p class="sub">Der zweite Act-8-Raid – Gold pro Drop wie bei Alzanor, Kisten zählen für den gesamten Run.</p>
+</div>
+
+<div class="input-row">
+    <div class="stat primary">
+        <span class="stat-label">Gewinn Valehir</span>
+        <span class="stat-value @(State.Act8.Valehir.Gesamt < 0 ? "loss" : "profit")">@Fmt.Gold(State.Act8.Valehir.Gesamt)</span>
+    </div>
+</div>
+
+<div class="single-col">
+    <Act8BossKarte Boss="State.Act8.Valehir" />
+</div>
+
+<p class="dmg-hint">
+    Gold pro Drop ist mit @Fmt.Gold(Act8Rechner.GoldProDropVorgabe) derselbe feste Spielwert wie bei Alzanor.
+    Für Kisten und Siegel liegen noch keine gezählten Werte aus Fettbongs Tabelle vor – trage deine eigenen
+    Zahlen ein, den Siegelpreis kannst du auch zentral unter <a href="mats">Mats</a> hinterlegen.
+</p>
