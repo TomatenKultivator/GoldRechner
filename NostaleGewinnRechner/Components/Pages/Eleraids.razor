@@ -112,7 +112,7 @@
                         <td>@row.Name</td>
                         <td class="r"><GoldInput @bind-Value="row.Faktor" /></td>
                         <td class="r">@Fmt.Gold(row.Anzahl(Ele.RaidsGesamt))</td>
-                        @if (row.Name == "Gold-Drops")
+                        @if (row.Name == EleraidRechner.GoldZeile)
                         {
                             <td class="r muted">@Fmt.Gold(row.Preis)</td>
                         }
@@ -120,7 +120,7 @@
                         {
                             <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
                         }
-                        <td class="r gold">@Fmt.Gold(row.Gesamt(Ele.RaidsGesamt))</td>
+                        <td class="r gold">@Fmt.Gold(Ele.DropErloes(row))</td>
                     </tr>
                 }
             </tbody>

@@ -277,6 +277,9 @@ public class IcRechner
 
 public class EleraidRechner
 {
+    [JsonIgnore] public Charakter? Charakter { get; set; }
+    private double F => Charakter?.Faktor ?? 1;
+
     public double Teams { get; set; } = 4;
 
     public List<FaktorRow> GlaceKosten { get; set; } =
@@ -324,12 +327,23 @@ public class EleraidRechner
     public double Gesamtkosten => GlaceGesamt + DracoGesamt;
 
     // Drops während der Raids (Glace + Draco zusammen)
+    /// <summary>Name der Bargold-Zeile – nur sie bekommt die Gold-Rate des Charakters.</summary>
+    public const string GoldZeile = "Gold-Drops";
+
     public List<FaktorRow> Drops { get; set; } =
     [
-        new() { Name = "Gold-Drops", Faktor = 8, Preis = 20_000 },
+        new() { Name = GoldZeile, Faktor = 8, Preis = 20_000 },
         new() { Name = "Vios", Faktor = 3, Preis = 20_000 },
     ];
-    public double DropsGesamt => Drops.Sum(r => r.Gesamt(RaidsGesamt));
+
+    /// <summary>
+    /// Erlös einer Drop-Zeile. Bargold zählt mit der Gold-Rate des Charakters,
+    /// Item-Drops (z. B. Vios) nicht – die Rate wirkt im Spiel nur auf Gold.
+    /// </summary>
+    public double DropErloes(FaktorRow zeile) =>
+        zeile.Gesamt(RaidsGesamt) * (zeile.Name == GoldZeile ? F : 1);
+
+    public double DropsGesamt => Drops.Sum(DropErloes);
     public double KostenVerrechnet => Gesamtkosten - DropsGesamt;
 
     // Variante A: Boxen öffnen und Inhalt verkaufen
@@ -358,7 +372,7 @@ public class EleraidRechner
         GlaceKosten.ForEach(r => r.Preis = 0);
         DracoKosten.ForEach(r => r.Preis = 0);
         // Der Gold-Drop-Wert bleibt als Vorgabe stehen (fester Spielwert).
-        Drops.ForEach(r => { r.Faktor = 0; if (r.Name != "Gold-Drops") { r.Preis = 0; } });
+        Drops.ForEach(r => { r.Faktor = 0; if (r.Name != GoldZeile) { r.Preis = 0; } });
         BoxenInhalt.ForEach(r => r.Nullen());
         BoxenpreisGlace = 0;
         BoxenpreisDraco = 0;
@@ -1031,6 +1045,7 @@ public class RechnerState
     private void Verkabeln()
     {
         Ic.Charakter = Charakter;
+        Eleraids.Charakter = Charakter;
         Act5.Charakter = Charakter;
         Act6.Charakter = Charakter;
         Act6.Erenia.Charakter = Charakter;
