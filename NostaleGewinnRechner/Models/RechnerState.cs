@@ -411,15 +411,21 @@ public class Act5Rechner
         ? GoldGehoben * F - SiegelPreis * Raids
         : (BargoldProRaid * F - SiegelPreis) * Raids;
 
+    // Ausbeute einer Stunde, von Fettbong gezählt. Gemessen wurde während eines
+    // Events mit 50 % mehr Box-Drops – nicht mit doppelter Menge. Die Rohwerte
+    // (734 Boxen, 1136 intakte und 880 kaputte Diamanten) sind darum durch 1,5
+    // geteilt, damit die Vorgabe den Normalfall abbildet und nicht das Event.
+    // Beide Varianten beschreiben dieselbe Ausbeute: Variante A öffnet die 489
+    // Boxen, Variante B verkauft sie – rund 2,75 Diamanten je Box.
     public List<ItemRow> Oeffnen { get; set; } =
     [
-        new() { Name = "Intakte Items", Anzahl = 3_609, Preis = 50_000 },
-        new() { Name = "Kaputte Items", Anzahl = 2_718, Preis = 10_000 },
+        new() { Name = "Intakte Items", Anzahl = 757, Preis = 50_000 },
+        new() { Name = "Kaputte Items", Anzahl = 587, Preis = 10_000 },
     ];
     public double OeffnenErloes => Oeffnen.Sum(r => r.Gesamt);
     public double GewinnOeffnen => NettoBargold + OeffnenErloes;
 
-    public double BoxenAnzahl { get; set; } = 365;
+    public double BoxenAnzahl { get; set; } = 489;
     public double Boxenpreis { get; set; } = 100_000;
     public double VerkaufErloes => BoxenAnzahl * Boxenpreis;
     public double GewinnVerkaufen => NettoBargold + VerkaufErloes;
