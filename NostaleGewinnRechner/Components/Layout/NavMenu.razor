@@ -1,0 +1,122 @@
+@inject NavigationManager Nav
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">
+            <span class="brand-gold">NosTale</span> Gewinnrechner
+        </a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">Übersicht</NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="mats">Mats</NavLink>
+        </div>
+
+        <div class="nav-section">Farmen</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="ic">IC</NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="eleraids">Eleraids</NavLink>
+        </div>
+
+        <div class="nav-section">Acts</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="act5">Act 5 · Kertos</NavLink>
+        </div>
+        <button type="button" class="nav-subgroup @(act6Offen ? "offen" : "")" @onclick="() => act6Offen = !act6Offen" @onclick:stopPropagation>
+            <span class="chev">▸</span> Act 6
+        </button>
+        @if (act6Offen)
+        {
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act6/erenia">Erenia</NavLink>
+            </div>
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act6/zenas">Zenas</NavLink>
+            </div>
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act6/fernon">Fernon</NavLink>
+            </div>
+        }
+
+        <button type="button" class="nav-subgroup @(act7Offen ? "offen" : "")" @onclick="() => act7Offen = !act7Offen" @onclick:stopPropagation>
+            <span class="chev">▸</span> Act 7
+        </button>
+        @if (act7Offen)
+        {
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act7/carno">Carno</NavLink>
+            </div>
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act7/kirolla">Kirolla</NavLink>
+            </div>
+            <div class="nav-item px-3 sub">
+                <NavLink class="nav-link" href="act7/belial">Belial</NavLink>
+            </div>
+        }
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="act8">Act 8 · Alzanor</NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="act9">Act 9 · Pollu</NavLink>
+        </div>
+
+        <div class="nav-section">Sonstiges</div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="sp-uppen">SP uppen</NavLink>
+        </div>
+    </nav>
+
+    <div class="credits">
+        <span class="credits-label">Tabellen &amp; Daten von</span>
+        <a class="credits-link" href="https://www.twitch.tv/fettbong" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+            </svg>
+            <span>Fettbong</span>
+        </a>
+        <span class="credits-sub">live auf Twitch</span>
+    </div>
+</div>
+
+@code {
+    private bool act6Offen;
+    private bool act7Offen;
+
+    protected override void OnInitialized()
+    {
+        GruppenAufklappen(Nav.Uri);
+        Nav.LocationChanged += BeiNavigation;
+    }
+
+    private void BeiNavigation(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        GruppenAufklappen(e.Location);
+        StateHasChanged();
+    }
+
+    // Ist eine Boss-Seite geöffnet, wird ihre Gruppe automatisch aufgeklappt.
+    private void GruppenAufklappen(string uri)
+    {
+        if (uri.Contains("/act6", StringComparison.OrdinalIgnoreCase))
+        {
+            act6Offen = true;
+        }
+
+        if (uri.Contains("/act7", StringComparison.OrdinalIgnoreCase))
+        {
+            act7Offen = true;
+        }
+    }
+
+    public void Dispose() => Nav.LocationChanged -= BeiNavigation;
+}

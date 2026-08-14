@@ -1,0 +1,96 @@
+@page "/ic"
+@inherits RechnerPage
+
+<PageTitle>IC – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Instant Combat</h1>
+    <p class="sub">Erträge pro IC-Run, skaliert über die Anzahl deiner Chars.</p>
+</div>
+
+<div class="input-row">
+    <label class="big-input">
+        <span>Anzahl Chars</span>
+        <GoldInput @bind-Value="Rechner.AnzahlChars" />
+    </label>
+    <div class="stat primary">
+        <span class="stat-label">Gewinn gesamt</span>
+        <span class="stat-value @(Rechner.Gewinn < 0 ? "loss" : "profit")">@Fmt.Gold(Rechner.Gewinn)</span>
+    </div>
+    <div class="stat">
+        <span class="stat-label">Gewinn pro Char</span>
+        <span class="stat-value">@Fmt.Gold(Rechner.GewinnProChar)</span>
+    </div>
+</div>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Erträge</h2><span class="card-note">Anzahl skaliert automatisch mit den Chars</span></header>
+    <div class="table-wrap">
+        <table class="calc-table">
+            <thead>
+                <tr><th>Item</th><th class="r">Pro Char</th><th class="r">Anzahl</th><th class="r editable">Preis</th><th class="r">Gesamt</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Rechner.Items)
+                {
+                    <tr>
+                        <td>@row.Name</td>
+                        <td class="r muted">@Fmt.Gold(row.Faktor)</td>
+                        <td class="r">@Fmt.Gold(row.Anzahl(Rechner.AnzahlChars))</td>
+                        <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                        <td class="r gold">@Fmt.Gold(row.Gesamt(Rechner.AnzahlChars))</td>
+                    </tr>
+                }
+                <tr>
+                    <td>Bargold</td>
+                    <td class="r muted">@Fmt.Gold(Rechner.BargoldProChar)</td>
+                    <td class="r muted">–</td>
+                    <td class="r muted">–</td>
+                    <td class="r gold">@Fmt.Gold(Rechner.Bargold)</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="4">Gewinn</td><td class="r gold">@Fmt.Gold(Rechner.Gewinn)</td></tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Fullis herstellen</h2><span class="card-note">Ansatz für 10 Fullis</span></header>
+    <div class="table-wrap">
+        <table class="calc-table">
+            <thead>
+                <tr><th>Zutat</th><th class="r">Anzahl</th><th class="r editable">Preis</th><th class="r">Kosten</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Rechner.FulliKosten)
+                {
+                    <tr>
+                        <td>@row.Name</td>
+                        <td class="r"><GoldInput @bind-Value="row.Anzahl" /></td>
+                        <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                        <td class="r">@Fmt.Gold(row.Gesamt)</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr><td colspan="3">Kosten für 10 Fullis</td><td class="r">@Fmt.Gold(Rechner.FulliKostenGesamt)</td></tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="input-row inner">
+        <label class="big-input">
+            <span>Verkaufspreis pro Fulli</span>
+            <GoldInput @bind-Value="Rechner.FulliVerkaufspreis" />
+        </label>
+        <div class="stat">
+            <span class="stat-label">Gewinn pro 10 Fullis</span>
+            <span class="stat-value @(Rechner.FulliGewinnProZehn < 0 ? "loss" : "profit")">@Fmt.Gold(Rechner.FulliGewinnProZehn)</span>
+        </div>
+    </div>
+</section>
+
+@code {
+    private IcRechner Rechner => State.Ic;
+}

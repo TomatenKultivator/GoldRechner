@@ -1,0 +1,32 @@
+<section class="calc-card">
+    <header class="card-head"><h2>@Boss.Name</h2></header>
+    <div class="table-wrap">
+        <table class="calc-table">
+            <tbody>
+                <tr><td>Anzahl Raids</td><td class="r"><GoldInput @bind-Value="Boss.Raids" /></td></tr>
+                <tr><td>Siegelpreis</td><td class="r"><GoldInput @bind-Value="Boss.SiegelPreis" /></td></tr>
+                <tr><td>Bargold-Quelle</td><td class="r"><GoldModusToggle @bind-Direkt="Boss.GoldDirekt" /></td></tr>
+                <tr class="@(Boss.GoldDirekt ? "zeile-inaktiv" : "")"><td>Anzahl Gold-Drops</td><td class="r"><GoldInput @bind-Value="Boss.DropsProRaid" /></td></tr>
+                <tr class="@(Boss.GoldDirekt ? "zeile-inaktiv" : "")"><td>Gold pro Drop</td><td class="r muted">@Fmt.Gold(Boss.GoldProDrop)</td></tr>
+                <tr class="@(Boss.GoldDirekt ? "zeile-inaktiv" : "")"><td class="muted">Gold pro Raid</td><td class="r">@Fmt.Gold(Boss.GoldProRaid)</td></tr>
+                <tr class="@(Boss.GoldDirekt ? "" : "zeile-inaktiv")"><td>Gold gesamt gehoben</td><td class="r"><GoldInput @bind-Value="Boss.GoldGehoben" /></td></tr>
+                <tr><td>Boxen pro Raid</td><td class="r"><GoldInput @bind-Value="Boss.BoxenProRaid" /></td></tr>
+                <tr><td>Wert pro Box</td><td class="r"><GoldInput @bind-Value="Boss.Boxenwert" /></td></tr>
+                @if (!Boss.GoldDirekt)
+                {
+                    <tr><td class="muted">Goldgewinn pro Raid</td><td class="r @(Boss.GoldgewinnProRaid < 0 ? "loss" : "")">@Fmt.Gold(Boss.GoldgewinnProRaid)</td></tr>
+                }
+                <tr><td class="muted">Gold gesamt</td><td class="r @(Boss.GoldGesamt < 0 ? "loss" : "")">@Fmt.Gold(Boss.GoldGesamt)</td></tr>
+                <tr><td class="muted">Boxen gesamt</td><td class="r">@Fmt.Gold(Boss.BoxenGesamt)</td></tr>
+            </tbody>
+            <tfoot>
+                <tr class="result"><td>Gewinn</td><td class="r @(Boss.Gesamt < 0 ? "loss" : "profit")">@Fmt.Gold(Boss.Gesamt)</td></tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public Act6Boss Boss { get; set; } = default!;
+}

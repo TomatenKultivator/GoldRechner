@@ -1,0 +1,21 @@
+@page "/act6"
+@page "/act6/erenia"
+@inherits RechnerPage
+
+<PageTitle>Act 6 · Erenia – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Act 6 <span class="accent">Erenia</span></h1>
+    <p class="sub">Raid-Boss mit Siegelkosten, Goldgewinn und Boxenwert.</p>
+</div>
+
+<div class="input-row">
+    <div class="stat primary">
+        <span class="stat-label">Gewinn Erenia</span>
+        <span class="stat-value @(State.Act6.Erenia.Gesamt < 0 ? "loss" : "profit")">@Fmt.Gold(State.Act6.Erenia.Gesamt)</span>
+    </div>
+</div>
+
+<div class="single-col">
+    <Act6BossKarte Boss="State.Act6.Erenia" />
+</div>

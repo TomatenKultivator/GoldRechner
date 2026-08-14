@@ -1,0 +1,11 @@
+<div class="seg seg-klein">
+    <button type="button" class="@(Direkt ? "" : "on")" @onclick="() => Setze(false)">Drops pro Raid</button>
+    <button type="button" class="@(Direkt ? "on" : "")" @onclick="() => Setze(true)">Gold gesamt</button>
+</div>
+
+@code {
+    [Parameter] public bool Direkt { get; set; }
+    [Parameter] public EventCallback<bool> DirektChanged { get; set; }
+
+    private Task Setze(bool wert) => DirektChanged.InvokeAsync(wert);
+}

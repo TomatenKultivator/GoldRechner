@@ -1,0 +1,59 @@
+@page "/act7/kirolla"
+@inherits RechnerPage
+
+<PageTitle>Act 7 · Kirolla – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Act 7 <span class="accent">Kirolla</span></h1>
+    <p class="sub">Raids mit Goldgewinn, Obsidianen und Kisten.</p>
+</div>
+
+<div class="input-row">
+    <div class="stat primary">
+        <span class="stat-label">Gewinn Kirolla</span>
+        <span class="stat-value @(A7.KirollaGewinn < 0 ? "loss" : "profit")">@Fmt.Gold(A7.KirollaGewinn)</span>
+    </div>
+</div>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Kirolla</h2></header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Anzahl Raids</span><GoldInput @bind-Value="A7.KirollaRaids" /></label>
+        <label class="big-input"><span>Siegelpreis</span><GoldInput @bind-Value="A7.KirollaSiegel" /></label>
+        <div class="big-input"><span>Bargold-Quelle</span><GoldModusToggle @bind-Direkt="A7.KirollaGoldDirekt" /></div>
+        <label class="big-input @(A7.KirollaGoldDirekt ? "inaktiv" : "")"><span>Gold-Drops pro Raid</span><GoldInput @bind-Value="A7.KirollaDropsProRaid" /></label>
+        <div class="stat @(A7.KirollaGoldDirekt ? "inaktiv" : "")"><span class="stat-label">Gold pro Drop</span><span class="stat-value">@Fmt.Gold(A7.KirollaGoldProDrop)</span></div>
+        <div class="stat @(A7.KirollaGoldDirekt ? "inaktiv" : "")"><span class="stat-label">Gold pro Raid</span><span class="stat-value">@Fmt.Gold(A7.KirollaGoldProRaid)</span></div>
+        <label class="big-input @(A7.KirollaGoldDirekt ? "" : "inaktiv")"><span>Gold gesamt gehoben</span><GoldInput @bind-Value="A7.KirollaGoldGehoben" /></label>
+        <div class="stat"><span class="stat-label">Goldgewinn</span><span class="stat-value @(A7.KirollaGoldgewinn < 0 ? "loss" : "")">@Fmt.Gold(A7.KirollaGoldgewinn)</span></div>
+    </div>
+    <div class="table-wrap">
+        <table class="calc-table">
+            <thead><tr><th>Drop</th><th class="r editable">Anzahl</th><th class="r editable">Preis</th><th class="r">Erlös</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>@A7.KirollaObsidiane.Name</td>
+                    <td class="r"><GoldInput @bind-Value="A7.KirollaObsidiane.Anzahl" /></td>
+                    <td class="r"><GoldInput @bind-Value="A7.KirollaObsidiane.Preis" /></td>
+                    <td class="r">@Fmt.Gold(A7.KirollaObsidiane.Gesamt)</td>
+                </tr>
+                @foreach (var row in A7.KirollaBoxen)
+                {
+                    <tr>
+                        <td>@row.Name</td>
+                        <td class="r"><GoldInput @bind-Value="row.Anzahl" /></td>
+                        <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                        <td class="r">@Fmt.Gold(row.Gesamt)</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="result"><td colspan="3">Gewinn</td><td class="r @(A7.KirollaGewinn < 0 ? "loss" : "profit")">@Fmt.Gold(A7.KirollaGewinn)</td></tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+
+@code {
+    private Act7Rechner A7 => State.Act7;
+}

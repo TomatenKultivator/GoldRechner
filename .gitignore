@@ -1,0 +1,15 @@
+## Visual Studio / .NET
+.vs/
+bin/
+obj/
+publish/
+*.user
+*.suo
+
+## Betriebssystem
+Thumbs.db
+.DS_Store
+.claude/
+
+# Exportierte Speicherstaende der App (persoenliche Werte)
+gewinnrechner-werte-*.json

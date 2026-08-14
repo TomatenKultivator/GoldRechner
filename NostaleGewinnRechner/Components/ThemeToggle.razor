@@ -1,0 +1,24 @@
+@inject IJSRuntime JS
+
+<button type="button" class="theme-toggle" @onclick="Wechseln" title="Helles/dunkles Design umschalten">
+    @(Hell ? "🌙 Dunkles Design" : "☀️ Helles Design")
+</button>
+
+@code {
+    private bool Hell;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Hell = await JS.InvokeAsync<string>("goldTheme.lesen") == "light";
+            StateHasChanged();
+        }
+    }
+
+    private async Task Wechseln()
+    {
+        Hell = !Hell;
+        await JS.InvokeVoidAsync("goldTheme.setzen", Hell ? "light" : "dark");
+    }
+}

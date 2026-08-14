@@ -1,0 +1,110 @@
+@page "/act5"
+@inherits RechnerPage
+
+<PageTitle>Act 5 · Kertos – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Act 5 <span class="accent">Kertos</span></h1>
+    <p class="sub">Bargold pro Raid plus Verwertung der Boxen – öffnen oder direkt verkaufen.</p>
+</div>
+
+<div class="input-row">
+    <label class="big-input">
+        <span>Anzahl Raids</span>
+        <GoldInput @bind-Value="A5.Raids" />
+    </label>
+    <label class="big-input">
+        <span>Siegelpreis</span>
+        <GoldInput @bind-Value="A5.SiegelPreis" />
+    </label>
+    <div class="big-input">
+        <span>Bargold-Quelle</span>
+        <GoldModusToggle @bind-Direkt="A5.GoldDirekt" />
+    </div>
+    <label class="big-input @(A5.GoldDirekt ? "inaktiv" : "")">
+        <span>Gold-Drops pro Raid</span>
+        <GoldInput @bind-Value="A5.DropsProRaid" />
+    </label>
+    <div class="stat @(A5.GoldDirekt ? "inaktiv" : "")">
+        <span class="stat-label">Gold pro Drop</span>
+        <span class="stat-value">@Fmt.Gold(A5.GoldProDrop)</span>
+    </div>
+    <div class="stat @(A5.GoldDirekt ? "inaktiv" : "")">
+        <span class="stat-label">Bargold pro Raid</span>
+        <span class="stat-value">@Fmt.Gold(A5.BargoldProRaid)</span>
+    </div>
+    <label class="big-input @(A5.GoldDirekt ? "" : "inaktiv")">
+        <span>Gold gesamt gehoben</span>
+        <GoldInput @bind-Value="A5.GoldGehoben" />
+    </label>
+    <div class="stat">
+        <span class="stat-label">Netto-Bargold</span>
+        <span class="stat-value @(A5.NettoBargold < 0 ? "loss" : "")">@Fmt.Gold(A5.NettoBargold)</span>
+    </div>
+    <div class="stat primary">
+        <span class="stat-label">Bester Gewinn</span>
+        <span class="stat-value @(A5.BesterGewinn < 0 ? "loss" : "")">@Fmt.Gold(A5.BesterGewinn)</span>
+    </div>
+</div>
+
+<div class="card-grid">
+    <section class="calc-card @(A5.GewinnOeffnen >= A5.GewinnVerkaufen ? "best" : "")">
+        <header class="card-head">
+            <h2>Variante A – Boxen öffnen</h2>
+            @if (A5.GewinnOeffnen >= A5.GewinnVerkaufen)
+            {
+                <span class="badge">Beste Variante</span>
+            }
+        </header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <thead><tr><th>Inhalt</th><th class="r editable">Anzahl</th><th class="r">Preis (NPC)</th><th class="r">Erlös</th></tr></thead>
+                <tbody>
+                    @foreach (var row in A5.Oeffnen)
+                    {
+                        <tr>
+                            <td>@row.Name</td>
+                            <td class="r"><GoldInput @bind-Value="row.Anzahl" /></td>
+                            <td class="r muted">@Fmt.Gold(row.Preis)</td>
+                            <td class="r">@Fmt.Gold(row.Gesamt)</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="3">Erlös Items</td><td class="r">@Fmt.Gold(A5.OeffnenErloes)</td></tr>
+                    <tr class="result"><td colspan="3">Gewinn (inkl. Bargold)</td><td class="r @(A5.GewinnOeffnen < 0 ? "loss" : "profit")">@Fmt.Gold(A5.GewinnOeffnen)</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+
+    <section class="calc-card @(A5.GewinnVerkaufen > A5.GewinnOeffnen ? "best" : "")">
+        <header class="card-head">
+            <h2>Variante B – Boxen verkaufen</h2>
+            @if (A5.GewinnVerkaufen > A5.GewinnOeffnen)
+            {
+                <span class="badge">Beste Variante</span>
+            }
+        </header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <thead><tr><th></th><th class="r editable">Anzahl</th><th class="r editable">Preis</th><th class="r">Erlös</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Boxen</td>
+                        <td class="r"><GoldInput @bind-Value="A5.BoxenAnzahl" /></td>
+                        <td class="r"><GoldInput @bind-Value="A5.Boxenpreis" /></td>
+                        <td class="r">@Fmt.Gold(A5.VerkaufErloes)</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="result"><td colspan="3">Gewinn (inkl. Bargold)</td><td class="r @(A5.GewinnVerkaufen < 0 ? "loss" : "profit")">@Fmt.Gold(A5.GewinnVerkaufen)</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+</div>
+
+@code {
+    private Act5Rechner A5 => State.Act5;
+}

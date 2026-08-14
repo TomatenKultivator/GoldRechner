@@ -1,0 +1,68 @@
+@page "/"
+@inherits RechnerPage
+
+<PageTitle>Übersicht – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Gold&shy;gewinne im Überblick</h1>
+    <p class="sub">Alle Werte kommen live aus den einzelnen Rechnern – ändere dort Preise oder Raid-Anzahlen und die Übersicht zieht sofort mit.</p>
+</div>
+
+@if (State.GesamtGewinn == 0)
+{
+    <section class="calc-card intro-card">
+        <header class="card-head"><h2>So funktioniert's</h2></header>
+        <ol class="intro-steps">
+            <li><strong>Werte laden:</strong> Rechts auf <strong>„Fettbongs Werte"</strong> klicken – oder in den einzelnen Rechnern deine eigenen Preise eintragen.</li>
+            <li><strong>Anpassen:</strong> Preise, Raid-Anzahlen und deine Gold-Rate (%) ändern – alles rechnet sofort mit und bleibt in deinem Browser gespeichert.</li>
+            <li><strong>Vergleichen:</strong> Hier auf der Übersicht siehst du auf einen Blick, welche Aktivität am meisten Gold bringt.</li>
+        </ol>
+    </section>
+}
+
+<div class="hero-row">
+    <div class="hero-tile">
+        <span class="hero-label">Beste Aktivität</span>
+        <span class="hero-value small">@Beste.Name</span>
+        <span class="hero-detail">@Fmt.Gold(Beste.Gewinn) Gold · @Beste.Detail</span>
+    </div>
+</div>
+
+<section class="calc-card">
+    <header class="card-head">
+        <h2>Gewinn pro Stunde</h2>
+        <span class="card-note">IC wird ×4 gerechnet (15-Minuten-Runs) · Klick auf einen Balken öffnet den Rechner</span>
+    </header>
+    <div class="bar-chart" role="img" aria-label="Vergleich der Goldgewinne pro Aktivität">
+        @foreach (var a in State.Aktivitaeten.OrderByDescending(x => x.Gewinn))
+        {
+            var pct = MaxGewinn > 0 ? Math.Max(0, a.Gewinn) / MaxGewinn * 100 : 0;
+            <a class="bar-row" href="@a.Href" title="@a.Name: @Fmt.Gold(a.Gewinn) Gold (@a.Detail)">
+                <span class="bar-label">
+                    <span class="bar-text">
+                        <span class="bar-name">@a.Name</span>
+                        <span class="bar-detail">@a.Detail</span>
+                    </span>
+                </span>
+                <span class="bar-track">
+                    <span class="bar-fill @(a.Gewinn < 0 ? "neg" : "")" style="width: @(Fmt.Css(Math.Max(pct, a.Gewinn < 0 ? 2 : 0.5)))%"></span>
+                </span>
+                <span class="bar-value @(a.Gewinn < 0 ? "loss" : "")">@Fmt.Gold(a.Gewinn)</span>
+            </a>
+        }
+    </div>
+</section>
+
+<footer class="page-credits">
+    Alle Tabellen &amp; Daten stammen von
+    <a href="https://www.twitch.tv/fettbong" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+        </svg>Fettbong</a>
+    – schau auf seinem Twitch-Kanal vorbei!
+</footer>
+
+@code {
+    private double MaxGewinn => State.Aktivitaeten.Max(a => Math.Abs(a.Gewinn));
+    private RechnerState.Aktivitaet Beste => State.Aktivitaeten.MaxBy(a => a.Gewinn)!;
+}

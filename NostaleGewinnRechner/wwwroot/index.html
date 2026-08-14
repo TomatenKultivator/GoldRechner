@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <script>
+        (function () {
+            var theme = "dark";
+            try { theme = localStorage.getItem("gewinnrechner-theme") || theme; } catch (e) { }
+            var param = new URLSearchParams(location.search).get("theme");
+            if (param === "light" || param === "dark") { theme = param; }
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
+    <title>NosTale Gewinnrechner</title>
+    <base href="/" />
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="NostaleGewinnRechner.styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="app-loading">
+            <div class="app-loading-ring"></div>
+            <p><span class="app-loading-gold">NosTale</span> Gewinnrechner wird geladen …</p>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        Ein unerwarteter Fehler ist aufgetreten.
+        <a href="." class="reload">Neu laden</a>
+        <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="gold-input.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+</html>

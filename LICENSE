@@ -1,0 +1,71 @@
+Diese Lizenz gilt fuer den Quellcode dieses Projekts.
+
+Spieldaten und Spielgrafiken sind davon NICHT erfasst. Was genau ausgenommen ist
+und warum, steht im Abschnitt "Nicht von dieser Lizenz erfasst" am Ende dieser
+Datei. Wer den Code weiterverwendet, muss die Rechte an diesen Inhalten selbst
+klaeren.
+
+================================================================================
+
+MIT License
+
+Copyright (c) 2026 TomatenKultivator
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+
+NICHT VON DIESER LIZENZ ERFASST
+
+Dieses Projekt ist ein inoffizielles Fan-Werkzeug zum Spiel NosTale. Es steht in
+keiner Verbindung zu Gameforge oder Entwell und wird von ihnen weder betrieben
+noch unterstuetzt oder geprueft. "NosTale" und die uebrigen Spielbezeichnungen
+sind Marken ihrer jeweiligen Inhaber; sie werden hier ausschliesslich
+beschreibend verwendet, um zu benennen, worauf sich die Berechnungen beziehen.
+
+Dieses Repository enthaelt bewusst KEINE Spielgrafiken, keine Screenshots und
+keine aus dem Spiel uebernommenen Texte. Was frueher hier lag - Item-Icons,
+Bossbilder und ein Screenshot des Ausruestungsfensters -, ist entfernt worden;
+die Historie wurde dafuer neu begonnen.
+
+Die MIT-Lizenz oben deckt den Quellcode ab, den der Urheber selbst geschrieben
+hat: die Rechenmodelle, die Blazor-Komponenten, den Aufbau der Anwendung. Sie
+deckt ausdruecklich NICHT ab:
+
+1. Bezeichnungen aus dem Spiel
+   Namen von Raids, Bossen, Materialien und Items (Kertos, Erenia, Vollmond-
+   kristall und so weiter) werden genannt, weil ein Rechner ohne sie nicht
+   benutzbar waere. Sie sind rein beschreibend verwendet und bleiben Kennzeichen
+   ihrer Inhaber.
+
+2. Zusammengetragene Spielwerte
+   Dropraten, Mengen und Aufwertungschancen sind Tatsachen und als einzelne
+   Werte nicht urheberrechtlich geschuetzt. An einer Sammlung solcher Werte kann
+   jedoch ein Datenbankherstellerrecht nach den §§ 87a ff. UrhG ihres Erstellers
+   bestehen. Die Tabellen, auf denen die Raid-Berechnungen beruhen, stammen von
+   Fettbong (twitch.tv/fettbong); ihre Verwendung hier ist mit ihm abgesprochen,
+   und er ist in der Anwendung als Quelle genannt. Diese Absprache gilt fuer
+   dieses Projekt und nicht automatisch fuer Dritte: Wer die Werte aus dem Code
+   uebernehmen will, sollte das mit ihm selbst klaeren.
+
+Bazar- und Marktpreise, die Nutzer selbst eintragen, sind eigene Eingaben und von
+alledem nicht betroffen.
+
+Diese Datei ist keine Rechtsberatung. Sie beschreibt, was der Urheber lizenzieren
+kann und was nicht.

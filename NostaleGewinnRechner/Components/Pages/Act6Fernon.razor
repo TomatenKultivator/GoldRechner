@@ -1,0 +1,62 @@
+@page "/act6/fernon"
+@inherits RechnerPage
+
+<PageTitle>Act 6 · Fernon – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Act 6 <span class="accent">Fernon</span></h1>
+    <p class="sub">Gold heben mit Siegelkosten – optional mit Goldheber-Anteil.</p>
+</div>
+
+<div class="input-row">
+    <div class="stat primary">
+        <span class="stat-label">Gewinn Fernon</span>
+        <span class="stat-value @(A6.FernonGewinn < 0 ? "loss" : "profit")">@Fmt.Gold(A6.FernonGewinn)</span>
+    </div>
+</div>
+
+<div class="single-col">
+    <section class="calc-card">
+        <header class="card-head"><h2>Fernon</h2></header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <tbody>
+                    <tr><td>Anzahl Raids</td><td class="r"><GoldInput @bind-Value="A6.FernonRaids" /></td></tr>
+                    <tr><td>Siegelpreis (einzeln)</td><td class="r"><GoldInput @bind-Value="A6.FernonSiegel" /></td></tr>
+                    <tr><td>Gold gehoben</td><td class="r"><GoldInput @bind-Value="A6.FernonGoldGehoben" /></td></tr>
+                    <tr><td class="muted">Siegelkosten gesamt</td><td class="r">@Fmt.Gold(A6.FernonSiegelkosten)</td></tr>
+                    <tr><td class="muted">Gold pro Raid</td><td class="r">@Fmt.Gold(A6.FernonGoldProRaid)</td></tr>
+                    <tr><td class="muted">Goldgewinn</td><td class="r @(A6.FernonGoldgewinn < 0 ? "loss" : "")">@Fmt.Gold(A6.FernonGoldgewinn)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <label class="check-row">
+            <input type="checkbox" @bind="A6.HeberDabei" />
+            <span>Goldheber dabei (Anteil wird abgezogen)</span>
+        </label>
+
+        @if (A6.HeberDabei)
+        {
+            <div class="table-wrap">
+                <table class="calc-table">
+                    <tbody>
+                        <tr><td>Gold für Heber</td><td class="r"><GoldInput @bind-Value="A6.GoldHeber" /></td></tr>
+                        <tr><td>Fullis für Heber</td><td class="r"><GoldInput @bind-Value="A6.HeberFullis" /></td></tr>
+                        <tr><td>Preis pro Fulli</td><td class="r"><GoldInput @bind-Value="A6.HeberFulliPreis" /></td></tr>
+                        <tr><td class="muted">Heberkosten</td><td class="r">@Fmt.Gold(A6.HeberKosten)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div class="result-line">
+            <span>Gewinn</span>
+            <span class="@(A6.FernonGewinn < 0 ? "loss" : "profit")">@Fmt.Gold(A6.FernonGewinn)</span>
+        </div>
+    </section>
+</div>
+
+@code {
+    private Act6Rechner A6 => State.Act6;
+}

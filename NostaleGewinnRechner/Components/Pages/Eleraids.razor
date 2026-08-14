@@ -1,0 +1,176 @@
+@page "/eleraids"
+@inherits RechnerPage
+
+<PageTitle>Eleraids – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Eleraids <span class="accent">Glace &amp; Draco</span></h1>
+    <p class="sub">Pro Team gibt es 5 Raids je Boss, pro Raid 15 Boxen.</p>
+</div>
+
+<div class="input-row">
+    <label class="big-input">
+        <span>Anzahl Teams</span>
+        <GoldInput @bind-Value="Ele.Teams" />
+    </label>
+    <div class="stat primary">
+        <span class="stat-label">Bester Gewinn</span>
+        <span class="stat-value @(Ele.BesterGewinn < 0 ? "loss" : "")">@Fmt.Gold(Ele.BesterGewinn)</span>
+    </div>
+    <div class="stat">
+        <span class="stat-label">Raids pro Boss</span>
+        <span class="stat-value">@Fmt.Gold(Ele.RaidsProBoss)</span>
+    </div>
+    <div class="stat">
+        <span class="stat-label">Boxen pro Boss</span>
+        <span class="stat-value">@Fmt.Gold(Ele.BoxenProBoss)</span>
+    </div>
+    <div class="stat">
+        <span class="stat-label">Kosten (Drops verrechnet)</span>
+        <span class="stat-value">@Fmt.Gold(Ele.KostenVerrechnet)</span>
+    </div>
+</div>
+
+<div class="card-grid">
+    <section class="calc-card">
+        <header class="card-head"><h2>Kosten Glace</h2></header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <thead><tr><th>Item</th><th class="r">Anzahl</th><th class="r editable">Preis</th><th class="r">Kosten</th></tr></thead>
+                <tbody>
+                    @foreach (var row in Ele.GlaceKosten)
+                    {
+                        <tr>
+                            <td>@row.Name</td>
+                            <td class="r">@Fmt.Gold(row.Anzahl(Ele.Teams))</td>
+                            <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                            <td class="r">@Fmt.Gold(row.Gesamt(Ele.Teams))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="calc-card">
+        <header class="card-head"><h2>Kosten Draco</h2></header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <thead><tr><th>Item</th><th class="r">Anzahl</th><th class="r editable">Preis</th><th class="r">Kosten</th></tr></thead>
+                <tbody>
+                    @foreach (var row in Ele.DracoKosten)
+                    {
+                        <tr>
+                            <td>@row.Name</td>
+                            <td class="r">@Fmt.Gold(row.Anzahl(Ele.Teams))</td>
+                            <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                            <td class="r">@Fmt.Gold(row.Gesamt(Ele.Teams))</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="3">Gesamtkosten (Glace + Draco)</td><td class="r">@Fmt.Gold(Ele.Gesamtkosten)</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+</div>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Drops während der Raids</h2><span class="card-note">@Fmt.Gold(Ele.RaidsGesamt) Raids gesamt</span></header>
+    <div class="table-wrap">
+        <table class="calc-table">
+            <thead><tr><th>Drop</th><th class="r editable">Pro Raid</th><th class="r">Gesamt</th><th class="r editable">Wert</th><th class="r">Erlös</th></tr></thead>
+            <tbody>
+                @foreach (var row in Ele.Drops)
+                {
+                    <tr>
+                        <td>@row.Name</td>
+                        <td class="r"><GoldInput @bind-Value="row.Faktor" /></td>
+                        <td class="r">@Fmt.Gold(row.Anzahl(Ele.RaidsGesamt))</td>
+                        @if (row.Name == "Gold-Drops")
+                        {
+                            <td class="r muted">@Fmt.Gold(row.Preis)</td>
+                        }
+                        else
+                        {
+                            <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                        }
+                        <td class="r gold">@Fmt.Gold(row.Gesamt(Ele.RaidsGesamt))</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr><td colspan="4">Drops gesamt</td><td class="r gold">@Fmt.Gold(Ele.DropsGesamt)</td></tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+
+<div class="card-grid">
+    <section class="calc-card @(Ele.GewinnOeffnen >= Ele.GewinnVerkaufen ? "best" : "")">
+        <header class="card-head">
+            <h2>Variante A – Boxen öffnen</h2>
+            @if (Ele.GewinnOeffnen >= Ele.GewinnVerkaufen)
+            {
+                <span class="badge">Beste Variante</span>
+            }
+        </header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <thead><tr><th>Inhalt</th><th class="r editable">Anzahl</th><th class="r editable">Preis</th><th class="r">Erlös</th></tr></thead>
+                <tbody>
+                    @foreach (var row in Ele.BoxenInhalt)
+                    {
+                        <tr>
+                            <td>@row.Name</td>
+                            <td class="r"><GoldInput @bind-Value="row.Anzahl" /></td>
+                            <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
+                            <td class="r">@Fmt.Gold(row.Gesamt)</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="3">Erlös Inhalt</td><td class="r">@Fmt.Gold(Ele.InhaltErloes)</td></tr>
+                    <tr class="result"><td colspan="3">Gewinn (abzgl. Kosten)</td><td class="r @(Ele.GewinnOeffnen < 0 ? "loss" : "profit")">@Fmt.Gold(Ele.GewinnOeffnen)</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+
+    <section class="calc-card @(Ele.GewinnVerkaufen > Ele.GewinnOeffnen ? "best" : "")">
+        <header class="card-head">
+            <h2>Variante B – Boxen verkaufen</h2>
+            @if (Ele.GewinnVerkaufen > Ele.GewinnOeffnen)
+            {
+                <span class="badge">Beste Variante</span>
+            }
+        </header>
+        <div class="table-wrap">
+            <table class="calc-table">
+                <thead><tr><th>Boss</th><th class="r">Boxen</th><th class="r editable">Preis pro Box</th><th class="r">Erlös</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Glace</td>
+                        <td class="r">@Fmt.Gold(Ele.BoxenProBoss)</td>
+                        <td class="r"><GoldInput @bind-Value="Ele.BoxenpreisGlace" /></td>
+                        <td class="r">@Fmt.Gold(Ele.VerkaufGlace)</td>
+                    </tr>
+                    <tr>
+                        <td>Draco</td>
+                        <td class="r">@Fmt.Gold(Ele.BoxenProBoss)</td>
+                        <td class="r"><GoldInput @bind-Value="Ele.BoxenpreisDraco" /></td>
+                        <td class="r">@Fmt.Gold(Ele.VerkaufDraco)</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="result"><td colspan="3">Gewinn (abzgl. Kosten)</td><td class="r @(Ele.GewinnVerkaufen < 0 ? "loss" : "profit")">@Fmt.Gold(Ele.GewinnVerkaufen)</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+</div>
+
+@code {
+    private EleraidRechner Ele => State.Eleraids;
+}

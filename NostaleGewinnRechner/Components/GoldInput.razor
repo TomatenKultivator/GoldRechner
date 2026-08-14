@@ -1,0 +1,29 @@
+@using System.Globalization
+
+<input class="gold-input"
+       type="text"
+       inputmode="numeric"
+       autocomplete="off"
+       spellcheck="false"
+       value="@Formatted"
+       @oninput="OnInput" />
+
+@code {
+    private static readonly CultureInfo De = CultureInfo.GetCultureInfo("de-DE");
+
+    [Parameter] public double Value { get; set; }
+    [Parameter] public EventCallback<double> ValueChanged { get; set; }
+
+    private string Formatted => Math.Round(Value).ToString("N0", De);
+
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        var digits = new string((e.Value?.ToString() ?? "").Where(char.IsDigit).Take(15).ToArray());
+        var value = digits.Length > 0 && double.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out var parsed)
+            ? parsed
+            : 0d;
+
+        Value = value;
+        await ValueChanged.InvokeAsync(value);
+    }
+}

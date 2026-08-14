@@ -1,0 +1,33 @@
+@using System.Globalization
+@inject RechnerState State
+@inject SpeicherService Speicher
+
+<div class="tpl-card">
+    <h3>Mein Charakter</h3>
+    <p class="tpl-sub">Erhöhte Gold-Rate deines Chars – wird auf Bargold und Gold pro Raid angerechnet (max. 200 %).</p>
+
+    <label class="char-rate">
+        <span>Gold-Rate</span>
+        <span class="char-input">
+            <GoldInput Value="State.Charakter.GoldRate" ValueChanged="RateGeaendert" />
+            <span class="char-unit">%</span>
+        </span>
+    </label>
+
+    @if (State.Charakter.GoldRate != 0)
+    {
+        <span class="tpl-note char-aktiv">Gold-Einnahmen × @FaktorText aktiv</span>
+    }
+</div>
+
+@code {
+    private string FaktorText =>
+        State.Charakter.Faktor.ToString("0.##", CultureInfo.GetCultureInfo("de-DE"));
+
+    private void RateGeaendert(double wert)
+    {
+        State.Charakter.GoldRate = wert;
+        State.MeldeAenderung();
+        Speicher.PlaneSpeichern();
+    }
+}

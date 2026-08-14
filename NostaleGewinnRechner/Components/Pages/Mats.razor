@@ -1,0 +1,151 @@
+@page "/mats"
+@inherits RechnerPage
+
+<PageTitle>Mats – NosTale Gewinnrechner</PageTitle>
+
+<div class="page-head">
+    <h1>Mats</h1>
+    <p class="sub">Globale Materialpreise – jede Änderung überschreibt sofort die Preise in allen Rechnern.</p>
+</div>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Tränke &amp; Verbrauch</h2><span class="card-note">Wird verwendet in: IC, Eleraids, Act 6</span></header>
+    <div class="input-row inner">
+        <label class="big-input"><span>ATK-Pots</span><GoldInput Value="State.Mats.AtkPot" ValueChanged="@(v => State.SetzeMat("atkpot", v))" /></label>
+        <label class="big-input"><span>DEF-Tränke</span><GoldInput Value="State.Mats.DefPot" ValueChanged="@(v => State.SetzeMat("defpot", v))" /></label>
+        <label class="big-input"><span>Energietränke</span><GoldInput Value="State.Mats.EnergiePot" ValueChanged="@(v => State.SetzeMat("energiepot", v))" /></label>
+        <label class="big-input"><span>EXP-Pots</span><GoldInput Value="State.Mats.ExpPot" ValueChanged="@(v => State.SetzeMat("exppot", v))" /></label>
+        <label class="big-input"><span>Riesige Erholungstränke</span><GoldInput Value="State.Mats.Riesige" ValueChanged="@(v => State.SetzeMat("riesige", v))" /></label>
+        <label class="big-input"><span>Fullis</span><GoldInput Value="State.Mats.Fulli" ValueChanged="@(v => State.SetzeMat("fulli", v))" /></label>
+    </div>
+</section>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Drops &amp; Handelsware</h2><span class="card-note">Wird verwendet in: Eleraids, SP uppen, Act 7 &amp; 9</span></header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Vollmonde</span><GoldInput Value="State.Mats.Vollmond" ValueChanged="@(v => State.SetzeMat("vollmond", v))" /></label>
+        <label class="big-input"><span>Engelsfedern</span><GoldInput Value="State.Mats.Engelsfeder" ValueChanged="@(v => State.SetzeMat("engelsfeder", v))" /></label>
+        <label class="big-input"><span>Obsidiane</span><GoldInput Value="State.Mats.Obsidian" ValueChanged="@(v => State.SetzeMat("obsidian", v))" /></label>
+    </div>
+</section>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Aufwertung (Uppen)</h2><span class="card-note">Wird verwendet in: Charakter-Analyse (Fahrpläne Waffe +1–13 &amp; SP +1–20), SP uppen</span></header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Cella</span><GoldInput Value="State.Mats.Cella" ValueChanged="@(v => State.SetzeMat("cella", v))" /></label>
+        <label class="big-input"><span>Seelensteine</span><GoldInput Value="State.Mats.Seelenstein" ValueChanged="@(v => State.SetzeMat("seelenstein", v))" /></label>
+        <label class="big-input"><span>Vollkommene Seelensteine</span><GoldInput Value="State.Mats.SeelensteinVollkommen" ValueChanged="@(v => State.SetzeMat("seelensteinvollkommen", v))" /></label>
+        <label class="big-input"><span>Drachenedelsteine</span><GoldInput Value="State.Mats.Drachenedelstein" ValueChanged="@(v => State.SetzeMat("drachenedelstein", v))" /></label>
+        <label class="big-input"><span>Glänzende Seelen (je Stück)</span><GoldInput Value="State.Mats.GlaenzendeSeele" ValueChanged="@(v => State.SetzeMat("glaenzendeseele", v))" /></label>
+        <label class="big-input"><span>Seelen (höhere Art)</span><GoldInput Value="State.Mats.SeeleHoehere" ValueChanged="@(v => State.SetzeMat("seelehoehere", v))" /></label>
+        <label class="big-input"><span>Morizios-Obsidiane</span><GoldInput Value="State.Mats.MorizioObsidian" ValueChanged="@(v => State.SetzeMat("morizioobsidian", v))" /></label>
+        <label class="big-input"><span>Loa-Runenpulver</span><GoldInput Value="State.Mats.LoaRunenpulver" ValueChanged="@(v => State.SetzeMat("loarunenpulver", v))" /></label>
+        <label class="big-input"><span>Schwarze Titanbarren</span><GoldInput Value="State.Mats.Titanbarren" ValueChanged="@(v => State.SetzeMat("titanbarren", v))" /></label>
+    </div>
+    <p class="dmg-hint">Vollmondkristalle und Engelsfedern zählen über die Felder unter „Drops &amp; Handelsware“ – sie fließen automatisch auch in die Aufwertungs-Fahrpläne ein. Morizios-Obsidiane, Loa-Runenpulver und Titanbarren gehören zum Runenschnitzen (Runen-Fahrplan in der Charakter-Analyse).</p>
+</section>
+
+<section class="calc-card">
+    <header class="card-head">
+        <h2>Schutzrollen</h2>
+        <span class="card-note">Je Versuch wird eine verbraucht – ab Stufe +@AufwertungDaten.WaffeZerstoerungAb kann sonst zerstört werden</span>
+    </header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Ausrüstungsschutzrolle</span><GoldInput Value="State.Mats.RolleAusruestung" ValueChanged="@(v => State.SetzeMat("rolleausruestung", v))" /></label>
+        <label class="big-input"><span>Goldene Ausrüstungsschutzrolle</span><GoldInput Value="State.Mats.RolleAusruestungGolden" ValueChanged="@(v => State.SetzeMat("rolleausruestunggolden", v))" /></label>
+        <label class="big-input"><span>Niedrige SP-Schutzrolle (bis +10)</span><GoldInput Value="State.Mats.RolleSpNiedrig" ValueChanged="@(v => State.SetzeMat("rollespniedrig", v))" /></label>
+        <label class="big-input"><span>Niedrige SP-Schutzrolle (Premium)</span><GoldInput Value="State.Mats.RolleSpNiedrigPremium" ValueChanged="@(v => State.SetzeMat("rollespniedrigpremium", v))" /></label>
+        <label class="big-input"><span>Hohe SP-Schutzrolle (+11 bis +15)</span><GoldInput Value="State.Mats.RolleSpHoch" ValueChanged="@(v => State.SetzeMat("rollesphoch", v))" /></label>
+        <label class="big-input"><span>Hohe SP-Schutzrolle (Premium)</span><GoldInput Value="State.Mats.RolleSpHochPremium" ValueChanged="@(v => State.SetzeMat("rollesphochpremium", v))" /></label>
+        <label class="big-input"><span>Drachen-Kartenschutzrolle (+16 bis +20)</span><GoldInput Value="State.Mats.RolleDrachen" ValueChanged="@(v => State.SetzeMat("rolledrachen", v))" /></label>
+        <label class="big-input"><span>Drachen-Kartenschutzrolle (Premium)</span><GoldInput Value="State.Mats.RolleDrachenPremium" ValueChanged="@(v => State.SetzeMat("rolledrachenpremium", v))" /></label>
+    </div>
+    <p class="dmg-hint">
+        Die goldene Ausrüstungsschutzrolle halbiert zusätzlich Cella und Gold, die Premium-Varianten der
+        SP-Rollen halbieren Vollmondkristalle, Engelsfedern und Gold – Seelensteine, Drachenedelsteine und
+        Seelen bleiben voll. Welche Rolle die Fahrpläne einsetzen, stellst du in der Charakter-Analyse ein.
+    </p>
+</section>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Raid-Zutaten &amp; Siegel</h2><span class="card-note">Glace und Draco haben eigene Siegel aus verschiedenen Zutaten</span></header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Eisblumen (Glace)</span><GoldInput Value="State.Mats.Eisblume" ValueChanged="@(v => State.SetzeMat("eisblume", v))" /></label>
+        <label class="big-input"><span>Eiswürfel (Glace)</span><GoldInput Value="State.Mats.Eiswuerfel" ValueChanged="@(v => State.SetzeMat("eiswuerfel", v))" /></label>
+        <label class="big-input"><span>Gillion (Draco)</span><GoldInput Value="State.Mats.Gillion" ValueChanged="@(v => State.SetzeMat("gillion", v))" /></label>
+        <label class="big-input"><span>Saat (beide)</span><GoldInput Value="State.Mats.Saat" ValueChanged="@(v => State.SetzeMat("saat", v))" /></label>
+        <label class="big-input"><span>Siegel Glace</span><GoldInput Value="State.Mats.SiegelGlace" ValueChanged="@(v => State.SetzeMat("siegelglace", v))" /></label>
+        <label class="big-input"><span>Siegel Draco</span><GoldInput Value="State.Mats.SiegelDraco" ValueChanged="@(v => State.SetzeMat("siegeldraco", v))" /></label>
+    </div>
+    <p class="dmg-hint">
+        Das Glace-Siegel wird aus Eisblumen, Eiswürfeln und Saat hergestellt, das Draco-Siegel aus Gillion
+        und Saat. Trage entweder den fertigen Siegelpreis ein oder die Zutaten – im Eleraid-Rechner stehen
+        beide Posten, gerechnet wird die Summe.
+    </p>
+</section>
+
+<section class="calc-card">
+    <header class="card-head">
+        <h2>Boss-Siegel</h2>
+        <span class="card-note">Nicht herstellbar – nur Drop oder Kauf; je Raid wird eines verbraucht</span>
+    </header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Act 5 · Kertos</span><GoldInput Value="State.Mats.SiegelKertos" ValueChanged="@(v => State.SetzeMat("siegelkertos", v))" /></label>
+        <label class="big-input"><span>Act 6 · Erenia</span><GoldInput Value="State.Mats.SiegelErenia" ValueChanged="@(v => State.SetzeMat("siegelerenia", v))" /></label>
+        <label class="big-input"><span>Act 6 · Zenas</span><GoldInput Value="State.Mats.SiegelZenas" ValueChanged="@(v => State.SetzeMat("siegelzenas", v))" /></label>
+        <label class="big-input"><span>Act 6 · Fernon</span><GoldInput Value="State.Mats.SiegelFernon" ValueChanged="@(v => State.SetzeMat("siegelfernon", v))" /></label>
+        <label class="big-input"><span>Act 7 · Carno</span><GoldInput Value="State.Mats.SiegelCarno" ValueChanged="@(v => State.SetzeMat("siegelcarno", v))" /></label>
+        <label class="big-input"><span>Act 7 · Kirolla</span><GoldInput Value="State.Mats.SiegelKirolla" ValueChanged="@(v => State.SetzeMat("siegelkirolla", v))" /></label>
+        <label class="big-input"><span>Act 7 · Belial</span><GoldInput Value="State.Mats.SiegelBelial" ValueChanged="@(v => State.SetzeMat("siegelbelial", v))" /></label>
+        <label class="big-input"><span>Act 8 · Alzanor</span><GoldInput Value="State.Mats.SiegelAlzanor" ValueChanged="@(v => State.SetzeMat("siegelalzanor", v))" /></label>
+        <label class="big-input"><span>Act 9 · Pollu</span><GoldInput Value="State.Mats.SiegelPollu" ValueChanged="@(v => State.SetzeMat("siegelpollu", v))" /></label>
+    </div>
+</section>
+
+<section class="calc-card">
+    <header class="card-head">
+        <h2>Truhen &amp; Kisten</h2>
+        <span class="card-note">Je Aktivität eigene Werte – „Low Rare“ aus Carno und aus Belial sind verschiedene Kisten</span>
+    </header>
+    <div class="input-row inner">
+        <label class="big-input"><span>Eleraid-Box Glace</span><GoldInput Value="State.Mats.TruheGlace" ValueChanged="@(v => State.SetzeMat("truheglace", v))" /></label>
+        <label class="big-input"><span>Eleraid-Box Draco</span><GoldInput Value="State.Mats.TruheDraco" ValueChanged="@(v => State.SetzeMat("truhedraco", v))" /></label>
+        <label class="big-input"><span>Blaue Steine (Boxeninhalt)</span><GoldInput Value="State.Mats.BlaueSteine" ValueChanged="@(v => State.SetzeMat("blauesteine", v))" /></label>
+        <label class="big-input"><span>Act 5 · Truhe</span><GoldInput Value="State.Mats.TruheAct5" ValueChanged="@(v => State.SetzeMat("truheact5", v))" /></label>
+        <label class="big-input"><span>Act 5 · Intakte Items</span><GoldInput Value="State.Mats.Act5Intakt" ValueChanged="@(v => State.SetzeMat("act5intakt", v))" /></label>
+        <label class="big-input"><span>Act 5 · Kaputte Items</span><GoldInput Value="State.Mats.Act5Kaputt" ValueChanged="@(v => State.SetzeMat("act5kaputt", v))" /></label>
+        <label class="big-input"><span>Act 6 · Erenia-Box</span><GoldInput Value="State.Mats.TruheErenia" ValueChanged="@(v => State.SetzeMat("truheerenia", v))" /></label>
+        <label class="big-input"><span>Act 6 · Zenas-Box</span><GoldInput Value="State.Mats.TruheZenas" ValueChanged="@(v => State.SetzeMat("truhezenas", v))" /></label>
+        <label class="big-input"><span>Act 7 · Carno Low Rare</span><GoldInput Value="State.Mats.TruheCarnoLow" ValueChanged="@(v => State.SetzeMat("truhecarnolow", v))" /></label>
+        <label class="big-input"><span>Act 7 · Carno High Rare</span><GoldInput Value="State.Mats.TruheCarnoHigh" ValueChanged="@(v => State.SetzeMat("truhecarnohigh", v))" /></label>
+        <label class="big-input"><span>Act 7 · Kirolla Low Rare</span><GoldInput Value="State.Mats.TruheKirollaLow" ValueChanged="@(v => State.SetzeMat("truhekirollalow", v))" /></label>
+        <label class="big-input"><span>Act 7 · Kirolla High Rare</span><GoldInput Value="State.Mats.TruheKirollaHigh" ValueChanged="@(v => State.SetzeMat("truhekirollahigh", v))" /></label>
+        <label class="big-input"><span>Act 7 · Belial Low Rare</span><GoldInput Value="State.Mats.TruheBelialLow" ValueChanged="@(v => State.SetzeMat("truhebeliallow", v))" /></label>
+        <label class="big-input"><span>Act 7 · Belial High Rare</span><GoldInput Value="State.Mats.TruheBelialHigh" ValueChanged="@(v => State.SetzeMat("truhebelialhigh", v))" /></label>
+        <label class="big-input"><span>Act 8 · Kiste</span><GoldInput Value="State.Mats.TruheAct8" ValueChanged="@(v => State.SetzeMat("truheact8", v))" /></label>
+        <label class="big-input"><span>Act 8 · High Rare</span><GoldInput Value="State.Mats.TruheAct8High" ValueChanged="@(v => State.SetzeMat("truheact8high", v))" /></label>
+        <label class="big-input"><span>Act 9 · Kiste</span><GoldInput Value="State.Mats.TruheAct9" ValueChanged="@(v => State.SetzeMat("truheact9", v))" /></label>
+        <label class="big-input"><span>Act 9 · High Rare</span><GoldInput Value="State.Mats.TruheAct9High" ValueChanged="@(v => State.SetzeMat("truheact9high", v))" /></label>
+    </div>
+</section>
+
+<section class="calc-card">
+    <header class="card-head"><h2>Wo wirken die Preise?</h2></header>
+    <div class="table-wrap">
+        <table class="calc-table">
+            <thead><tr><th>Material</th><th>Überschreibt</th></tr></thead>
+            <tbody>
+                <tr><td>Vollmonde</td><td class="muted">IC, Eleraids (Boxen öffnen), SP uppen, Act 9 · Pollu, Aufwertungs-Fahrpläne (SP)</td></tr>
+                <tr><td>Engelsfedern</td><td class="muted">Eleraids (Boxen öffnen), SP uppen, Aufwertungs-Fahrpläne (SP)</td></tr>
+                <tr><td>EXP-Pots</td><td class="muted">Eleraids (Boxen öffnen)</td></tr>
+                <tr><td>ATK- / DEF- / Energietränke</td><td class="muted">IC (Erträge)</td></tr>
+                <tr><td>Riesige Erholungstränke</td><td class="muted">IC (Erträge und Fulli-Herstellung)</td></tr>
+                <tr><td>Fullis</td><td class="muted">IC (Verkaufspreis), Act 6 · Fernon (Goldheber)</td></tr>
+                <tr><td>Obsidiane</td><td class="muted">Act 7 · Kirolla und Belial (Boxen öffnen)</td></tr>
+                <tr><td>Cella / Seelensteine</td><td class="muted">Waffen-Aufwertung (+1–13)</td></tr>
+                <tr><td>Drachenedelsteine / Seelen</td><td class="muted">SP uppen, SP-Aufwertung (+1–20)</td></tr>
+                <tr><td>Morizios-Obsidiane / Loa-Runenpulver / Titanbarren</td><td class="muted">Runen; Runenpulver auch Act 7 · Belial (Boxen öffnen)</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>

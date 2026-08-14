@@ -1,0 +1,38 @@
+@inherits LayoutComponentBase
+@inject SpeicherService Speicher
+@inject NavigationManager Nav
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="main-grid">
+            <article class="content px-4">
+                @Body
+            </article>
+            @if (MitRail)
+            {
+                <aside class="template-rail">
+                    <ThemeToggle />
+                    <CharakterPanel />
+                    <TemplatePanel />
+                </aside>
+            }
+        </div>
+    </main>
+</div>
+
+@code {
+    // Auf der Charakter-Erstellung stören Gold-Rate und Vorlagen nur – dort entfällt die rechte Leiste.
+    private bool MitRail => !Nav.Uri.Contains("/charaktere", StringComparison.OrdinalIgnoreCase);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Speicher.LadenAsync();
+        }
+    }
+}

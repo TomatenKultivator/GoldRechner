@@ -1,0 +1,9 @@
+# Binärdateien nie von Git-Zeilenenden-Konvertierung anfassen lassen
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ods binary

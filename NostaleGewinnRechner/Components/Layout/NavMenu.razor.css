@@ -1,0 +1,193 @@
+.navbar-toggler {
+    appearance: none;
+    cursor: pointer;
+    width: 3.5rem;
+    height: 2.5rem;
+    color: white;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28229, 181, 79, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+}
+
+.navbar-toggler:checked {
+    background-color: rgba(229, 181, 79, 0.25);
+}
+
+.top-row {
+    min-height: 3.5rem;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid #262b33;
+}
+
+.navbar-brand {
+    font-size: 1.05rem;
+    color: #e8ebf0;
+    font-weight: 600;
+}
+
+::deep .brand-gold {
+    background: linear-gradient(120deg, #f2cf72, #c9922e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.nav-section {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6d7686;
+    padding: 1.1rem 1.6rem 0.35rem;
+}
+
+.nav-subgroup {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #aab3c2;
+    padding: 0.55rem 1.6rem 0.3rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    text-align: left;
+    transition: color 0.15s ease;
+}
+
+.nav-subgroup:hover {
+    color: #e8ebf0;
+}
+
+.nav-subgroup .chev {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #6d7686;
+    transition: transform 0.15s ease;
+}
+
+.nav-subgroup.offen .chev {
+    transform: rotate(90deg);
+    color: #e5b54f;
+}
+
+.nav-item.sub ::deep .nav-link {
+    padding-left: 1.9rem;
+    height: 2.3rem;
+    font-size: 0.87rem;
+}
+
+::deep .nav-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    margin-right: 0.6rem;
+    flex-shrink: 0;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.25rem;
+}
+
+    .nav-item:first-of-type {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item ::deep .nav-link {
+        color: #a7afbd;
+        background: none;
+        border: none;
+        border-radius: 7px;
+        height: 2.6rem;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding-left: 0.9rem;
+    }
+
+.nav-item ::deep a.active {
+    background: linear-gradient(90deg, rgba(229, 181, 79, 0.18), rgba(229, 181, 79, 0.06));
+    color: #f6d886;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 #e5b54f, 0 0 18px rgba(229, 181, 79, 0.1);
+}
+
+.nav-item ::deep .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #e8ebf0;
+}
+
+.nav-scrollable {
+    display: none;
+}
+
+.navbar-toggler:checked ~ .nav-scrollable {
+    display: flex;
+    flex-direction: column;
+}
+
+.credits {
+    margin-top: auto;
+    padding: 1rem 1.6rem 1.2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.credits-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6d7686;
+}
+
+.credits-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #bf94ff;
+    font-weight: 700;
+    font-size: 1.02rem;
+    text-decoration: none;
+    width: fit-content;
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+.credits-link svg {
+    width: 1.05rem;
+    height: 1.05rem;
+}
+
+.credits-link:hover {
+    color: #d8c2ff;
+    text-shadow: 0 0 14px rgba(169, 112, 255, 0.6);
+}
+
+.credits-sub {
+    font-size: 0.75rem;
+    color: #6d7686;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .nav-scrollable {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}

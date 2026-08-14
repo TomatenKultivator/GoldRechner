@@ -1,0 +1,92 @@
+@inject RechnerState State
+@inject IJSRuntime JS
+
+<div class="tpl-card">
+    <h3>Vorlagen</h3>
+    <p class="tpl-sub">Füllt alle Rechner mit einem kompletten Werte-Set.</p>
+
+    <button type="button" class="tpl-btn tpl-fettbong" @onclick="LadeFettbong">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+        </svg>
+        Fettbongs Werte
+    </button>
+
+    <button type="button" class="tpl-btn" @onclick="Nullen">
+        Alles auf 0
+    </button>
+
+    <span class="tpl-active">Aktive Vorlage: <strong>@State.AktiveVorlage</strong></span>
+</div>
+
+<div class="tpl-card">
+    <h3>Meine Werte</h3>
+    <p class="tpl-sub">Speichere deine Eingaben als Datei oder lade sie wieder ein.</p>
+
+    <button type="button" class="tpl-btn" @onclick="Exportieren">
+        ⬇ Exportieren
+    </button>
+
+    <label class="tpl-btn tpl-file">
+        ⬆ Importieren
+        <InputFile OnChange="Importieren" accept=".json,application/json" />
+    </label>
+
+    @if (Meldung is not null)
+    {
+        <span class="tpl-msg @(MeldungFehler ? "fehler" : "")">@Meldung</span>
+    }
+
+    <span class="tpl-note">Deine Eingaben bleiben automatisch in diesem Browser gespeichert.</span>
+</div>
+
+@code {
+    private string? Meldung;
+    private bool MeldungFehler;
+
+    private void LadeFettbong()
+    {
+        State.LadeFettbong();
+        Meldung = null;
+    }
+
+    private void Nullen()
+    {
+        State.Nullen();
+        Meldung = null;
+    }
+
+    private async Task Exportieren()
+    {
+        var dateiname = $"gewinnrechner-werte-{DateTime.Now:yyyy-MM-dd}.json";
+        await JS.InvokeVoidAsync("goldDatei.speichern", dateiname, State.ExportJson());
+        Meldung = "Datei heruntergeladen ✓";
+        MeldungFehler = false;
+    }
+
+    private async Task Importieren(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            using var stream = e.File.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024);
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+
+            if (State.ImportJson(json))
+            {
+                Meldung = "Werte importiert ✓";
+                MeldungFehler = false;
+            }
+            else
+            {
+                Meldung = "Datei konnte nicht gelesen werden.";
+                MeldungFehler = true;
+            }
+        }
+        catch
+        {
+            Meldung = "Datei konnte nicht gelesen werden.";
+            MeldungFehler = true;
+        }
+    }
+}
