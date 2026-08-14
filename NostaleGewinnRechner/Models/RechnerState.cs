@@ -300,8 +300,28 @@ public class EleraidRechner
     public double BoxenProBoss => RaidsProBoss * 15;
     public double RaidsGesamt => RaidsProBoss * 2;
 
-    public double Gesamtkosten =>
-        GlaceKosten.Sum(r => r.Gesamt(Teams)) + DracoKosten.Sum(r => r.Gesamt(Teams));
+    /// <summary>Name der Siegel-Zeile in beiden Kostenlisten.</summary>
+    private const string SiegelZeile = "Siegel";
+
+    // Ein Siegel wird entweder gekauft oder aus den Zutaten selbst hergestellt –
+    // niemals beides. Vorher summierte der Rechner alle Zeilen und zählte damit
+    // den doppelten Weg. Die Vorgabe ist Kaufen, weil nur dafür ein Preis hinterlegt ist.
+    /// <summary>true = Glace-Siegel kaufen, false = aus Eisblumen, Eiswürfeln und Saat herstellen.</summary>
+    public bool GlaceSiegelKaufen { get; set; } = true;
+
+    /// <summary>true = Draco-Siegel kaufen, false = aus Gillion und Saat herstellen.</summary>
+    public bool DracoSiegelKaufen { get; set; } = true;
+
+    /// <summary>Zählt diese Zeile beim gewählten Weg mit?</summary>
+    public static bool ZeileZaehlt(FaktorRow zeile, bool kaufen) => (zeile.Name == SiegelZeile) == kaufen;
+
+    private double BossKosten(List<FaktorRow> zeilen, bool kaufen) =>
+        zeilen.Where(r => ZeileZaehlt(r, kaufen)).Sum(r => r.Gesamt(Teams));
+
+    public double GlaceGesamt => BossKosten(GlaceKosten, GlaceSiegelKaufen);
+    public double DracoGesamt => BossKosten(DracoKosten, DracoSiegelKaufen);
+
+    public double Gesamtkosten => GlaceGesamt + DracoGesamt;
 
     // Drops während der Raids (Glace + Draco zusammen)
     public List<FaktorRow> Drops { get; set; } =
@@ -342,53 +362,6 @@ public class EleraidRechner
         BoxenInhalt.ForEach(r => r.Nullen());
         BoxenpreisGlace = 0;
         BoxenpreisDraco = 0;
-    }
-}
-
-// ---------------------------------------------------------------- SP uppen
-
-public class SpUppenRechner
-{
-    // Feste Mengen pro Rolle (Spiel-Konstanten)
-    public const double GoldNormal = 2_250_000;
-    public const double GoldPremium = 1_125_000;
-    public const double VollmondeNormal = 40;
-    public const double VollmondePremium = 20;
-    public const double FedernNormal = 120;
-    public const double FedernPremium = 60;
-    public const double EdelsteineNormal = 10;
-    public const double EdelsteinePremium = 10;
-
-    public double Anzahl { get; set; } = 1;
-
-    // Preise – nur einmal eintragen, gelten für beide Varianten
-    public double PreisRolleNormal { get; set; } = 466_000;
-    public double PreisRollePremium { get; set; } = 3_400_000;
-    public double PreisVollmond { get; set; } = 21_000;
-    public double PreisFeder { get; set; } = 23_000;
-    public double PreisEdelstein { get; set; } = 25_000;
-
-    public double NormalProRolle =>
-        PreisRolleNormal + GoldNormal +
-        VollmondeNormal * PreisVollmond + FedernNormal * PreisFeder + EdelsteineNormal * PreisEdelstein;
-
-    public double PremiumProRolle =>
-        PreisRollePremium + GoldPremium +
-        VollmondePremium * PreisVollmond + FedernPremium * PreisFeder + EdelsteinePremium * PreisEdelstein;
-
-    public double NormalGesamt => NormalProRolle * Anzahl;
-    public double PremiumGesamt => PremiumProRolle * Anzahl;
-    /// <summary>Positiv = Premium ist teurer als Normal.</summary>
-    public double PremiumAufpreis => PremiumGesamt - NormalGesamt;
-
-    public void Nullen()
-    {
-        Anzahl = 0;
-        PreisRolleNormal = 0;
-        PreisRollePremium = 0;
-        PreisVollmond = 0;
-        PreisFeder = 0;
-        PreisEdelstein = 0;
     }
 }
 
@@ -744,7 +717,6 @@ public class RechnerState
 {
     public IcRechner Ic { get; private set; } = new();
     public EleraidRechner Eleraids { get; private set; } = new();
-    public SpUppenRechner SpUppen { get; private set; } = new();
     public Act5Rechner Act5 { get; private set; } = new();
     public Act6Rechner Act6 { get; private set; } = new();
     public Act7Rechner Act7 { get; private set; } = new();
@@ -786,14 +758,12 @@ public class RechnerState
                 Mats.Vollmond = preis;
                 FaktorPreis(Ic.Items, "Vollmonde", preis);
                 ItemPreis(Eleraids.BoxenInhalt, "Vollmonde", preis);
-                SpUppen.PreisVollmond = preis;
                 Act9.VollmondPreis = preis;
                 break;
             case "engelsfeder":
                 Mats.Engelsfeder = preis;
                 FaktorPreis(Ic.Items, "Federn", preis);
                 ItemPreis(Eleraids.BoxenInhalt, "Engelsfedern", preis);
-                SpUppen.PreisFeder = preis;
                 break;
             case "exppot":
                 Mats.ExpPot = preis;
@@ -838,7 +808,6 @@ public class RechnerState
                 break;
             case "drachenedelstein":
                 Mats.Drachenedelstein = preis;
-                SpUppen.PreisEdelstein = preis;
                 break;
             case "glaenzendeseele":
                 Mats.GlaenzendeSeele = preis;
@@ -1086,7 +1055,6 @@ public class RechnerState
     {
         Ic = new();
         Eleraids = new();
-        SpUppen = new();
         Act5 = new();
         Act6 = new();
         Act7 = new();
@@ -1102,7 +1070,6 @@ public class RechnerState
     {
         Ic.Nullen();
         Eleraids.Nullen();
-        SpUppen.Nullen();
         Act5.Nullen();
         Act6.Nullen();
         Act7.Nullen();
@@ -1125,7 +1092,6 @@ public class RechnerState
             PreisStand = PreisStand,
             Ic = Ic,
             Eleraids = Eleraids,
-            SpUppen = SpUppen,
             Act5 = Act5,
             Act6 = Act6,
             Act7 = Act7,
@@ -1148,7 +1114,6 @@ public class RechnerState
 
             Ic = daten.Ic ?? Ic;
             Eleraids = daten.Eleraids ?? Eleraids;
-            SpUppen = daten.SpUppen ?? SpUppen;
             Act5 = daten.Act5 ?? Act5;
             Act6 = daten.Act6 ?? Act6;
             Act7 = daten.Act7 ?? Act7;
@@ -1206,7 +1171,6 @@ public class ExportDaten
     public int PreisStand { get; set; }
     public IcRechner? Ic { get; set; }
     public EleraidRechner? Eleraids { get; set; }
-    public SpUppenRechner? SpUppen { get; set; }
     public Act5Rechner? Act5 { get; set; }
     public Act6Rechner? Act6 { get; set; }
     public Act7Rechner? Act7 { get; set; }

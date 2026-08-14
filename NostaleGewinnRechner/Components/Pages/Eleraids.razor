@@ -33,48 +33,72 @@
 
 <div class="card-grid">
     <section class="calc-card">
-        <header class="card-head"><h2>Kosten Glace</h2></header>
+        <header class="card-head">
+            <h2>Kosten Glace</h2>
+            <div class="seg seg-klein">
+                <button type="button" class="@(Ele.GlaceSiegelKaufen ? "on" : "")" @onclick="() => Ele.GlaceSiegelKaufen = true">Siegel kaufen</button>
+                <button type="button" class="@(Ele.GlaceSiegelKaufen ? "" : "on")" @onclick="() => Ele.GlaceSiegelKaufen = false">Selbst herstellen</button>
+            </div>
+        </header>
         <div class="table-wrap">
             <table class="calc-table">
                 <thead><tr><th>Item</th><th class="r">Anzahl</th><th class="r editable">Preis</th><th class="r">Kosten</th></tr></thead>
                 <tbody>
                     @foreach (var row in Ele.GlaceKosten)
                     {
-                        <tr>
+                        var zaehlt = EleraidRechner.ZeileZaehlt(row, Ele.GlaceSiegelKaufen);
+                        <tr class="@(zaehlt ? "" : "inaktiv")">
                             <td>@row.Name</td>
                             <td class="r">@Fmt.Gold(row.Anzahl(Ele.Teams))</td>
                             <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
-                            <td class="r">@Fmt.Gold(row.Gesamt(Ele.Teams))</td>
+                            <td class="r">@(zaehlt ? Fmt.Gold(row.Gesamt(Ele.Teams)) : "–")</td>
                         </tr>
                     }
                 </tbody>
+                <tfoot>
+                    <tr><td colspan="3">Kosten Glace</td><td class="r">@Fmt.Gold(Ele.GlaceGesamt)</td></tr>
+                </tfoot>
             </table>
         </div>
     </section>
 
     <section class="calc-card">
-        <header class="card-head"><h2>Kosten Draco</h2></header>
+        <header class="card-head">
+            <h2>Kosten Draco</h2>
+            <div class="seg seg-klein">
+                <button type="button" class="@(Ele.DracoSiegelKaufen ? "on" : "")" @onclick="() => Ele.DracoSiegelKaufen = true">Siegel kaufen</button>
+                <button type="button" class="@(Ele.DracoSiegelKaufen ? "" : "on")" @onclick="() => Ele.DracoSiegelKaufen = false">Selbst herstellen</button>
+            </div>
+        </header>
         <div class="table-wrap">
             <table class="calc-table">
                 <thead><tr><th>Item</th><th class="r">Anzahl</th><th class="r editable">Preis</th><th class="r">Kosten</th></tr></thead>
                 <tbody>
                     @foreach (var row in Ele.DracoKosten)
                     {
-                        <tr>
+                        var zaehlt = EleraidRechner.ZeileZaehlt(row, Ele.DracoSiegelKaufen);
+                        <tr class="@(zaehlt ? "" : "inaktiv")">
                             <td>@row.Name</td>
                             <td class="r">@Fmt.Gold(row.Anzahl(Ele.Teams))</td>
                             <td class="r"><GoldInput @bind-Value="row.Preis" /></td>
-                            <td class="r">@Fmt.Gold(row.Gesamt(Ele.Teams))</td>
+                            <td class="r">@(zaehlt ? Fmt.Gold(row.Gesamt(Ele.Teams)) : "–")</td>
                         </tr>
                     }
                 </tbody>
                 <tfoot>
-                    <tr><td colspan="3">Gesamtkosten (Glace + Draco)</td><td class="r">@Fmt.Gold(Ele.Gesamtkosten)</td></tr>
+                    <tr><td colspan="3">Kosten Draco</td><td class="r">@Fmt.Gold(Ele.DracoGesamt)</td></tr>
+                    <tr class="result"><td colspan="3">Gesamtkosten (Glace + Draco)</td><td class="r">@Fmt.Gold(Ele.Gesamtkosten)</td></tr>
                 </tfoot>
             </table>
         </div>
     </section>
 </div>
+
+<p class="dmg-hint">
+    Ein Siegel wird entweder im Bazar gekauft <strong>oder</strong> aus den Zutaten selbst hergestellt –
+    nie beides. Der jeweils nicht gewählte Weg ist ausgegraut und zählt nicht mit. Glace und Draco
+    brauchen dabei unterschiedliche Siegel aus unterschiedlichen Zutaten, darum wird je Boss getrennt gewählt.
+</p>
 
 <section class="calc-card">
     <header class="card-head"><h2>Drops während der Raids</h2><span class="card-note">@Fmt.Gold(Ele.RaidsGesamt) Raids gesamt</span></header>
